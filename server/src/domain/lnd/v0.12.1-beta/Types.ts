@@ -1,5 +1,31 @@
-// eslint-disable-next-line @typescript-eslint/no-namespace
+/* eslint-disable @typescript-eslint/no-namespace */
 export namespace Lnd {
+    export interface Info {
+        uris: string[];
+        chains: Chain[];
+        features: FeatureMap;
+        identity_pubkey: string;
+        alias: string;
+        num_pending_channels: number;
+        num_active_channels: number;
+        num_peers: number;
+        block_height: number;
+        block_hash: string;
+        synced_to_chain: boolean;
+        testnet: boolean;
+        best_header_timestamp: string;
+        version: string;
+        num_inactive_channels: number;
+        color: number;
+        synced_to_graph: boolean;
+        commit_hash: string;
+    }
+
+    export interface Chain {
+        chain: string;
+        network: string;
+    }
+
     export interface Graph {
         // Exercise: define the `nodes` and `edges` properties in this interface.
         // These arrays of LightningNode and ChannelEdge objects.

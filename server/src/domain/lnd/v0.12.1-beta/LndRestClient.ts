@@ -1,5 +1,5 @@
 import https from "https";
-import { Lnd } from "./LndRestTypes";
+import { Lnd } from "./Types";
 
 /**
  * A domain specific REST client for LND. This class makes requests using
@@ -14,9 +14,7 @@ export class LndRestClient {
      * @returns
      */
     public async getGraph(): Promise<Lnd.Graph> {
-        // Exercise: use the `get` method below to call `/v1/graph` API
-        // and return the results
-        return undefined;
+        return this.get("/v1/graph");
     }
 
     /**
