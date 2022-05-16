@@ -1,5 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-namespace */
 export namespace Lnd {
+    export type uint64 = string;
+    export type int64 = string;
+    export type uint32 = number;
+    export type int32 = number;
+
     export interface Info {
         uris: string[];
         chains: Chain[];
@@ -114,5 +120,141 @@ export namespace Lnd {
         capacity: string;
         closed_height: number;
         chan_point: ChannelPoint;
+    }
+
+    export interface AddInvoiceInput {
+        preimage?: Buffer;
+        memo?: string;
+        amt?: number;
+        amt_msat?: number;
+        description_hash?: string;
+        fallback_addr?: string;
+        expiry?: number;
+        private?: boolean;
+    }
+
+    export interface AddInvoiceResult {
+        r_hash: Buffer;
+        payment_request: string;
+        add_index: number;
+        payment_addr: Buffer;
+    }
+
+    export interface Invoice {
+        memo: string;
+        r_preimage: Buffer;
+        r_hash: Buffer;
+        value: int64;
+        value_msat: int64;
+        settled: boolean;
+        creation_date: int64;
+        settle_date: int64;
+        payment_request: string;
+        description_hash: Buffer;
+        expiry: int64;
+        fallback_addr: string;
+        cltv_expiry: uint64;
+        route_hints: RouteHint[];
+        private: boolean;
+        add_index: uint64;
+        settle_index: uint64;
+        amt_paid: int64;
+        amt_paid_sat: int64;
+        amt_paid_msat: int64;
+        state: InvoiceState;
+        htlcs: InvoiceHtlc[];
+        features: FeaturesEntry[];
+        is_keysend: boolean;
+        payment_addr: Buffer;
+        is_amp: boolean;
+        amp_invoice_state: AmpInvoiceStateEntry[];
+    }
+
+    export interface RouteHint {
+        hop_hints: HopHint[];
+    }
+
+    export interface HopHint {
+        node_id: string;
+        chan_id: uint64;
+        fee_base_msat: uint32;
+        fee_proportional_millionths: uint32;
+        cltv_expiry_delta: uint32;
+    }
+
+    export enum InvoiceState {
+        Open = "OPEN",
+        Settled = "SETTLED",
+        Canceled = "CANCELED",
+        Accepted = "ACCEPTED",
+    }
+
+    export interface InvoiceHtlc {
+        chan_id: uint64;
+        htlc_index: uint64;
+        amt_msat: uint64;
+        accept_height: int32;
+        accept_time: int64;
+        resolve_time: int64;
+        expiry_height: int64;
+        state: InvoiceHtlcState;
+        custom_records: any[];
+        mpp_total_amt_msat: uint64;
+        amp: Amp;
+    }
+
+    export interface Amp {
+        root_share: Buffer;
+        set_id: Buffer;
+        child_index: number;
+        hash: Buffer;
+        preimage: Buffer;
+    }
+
+    export enum InvoiceHtlcState {
+        Accepted = "ACCEPTED",
+        Settled = "SETTLED",
+        Canceled = "CANCELED",
+    }
+
+    export interface FeaturesEntry {
+        key: uint32;
+        value: Feature;
+    }
+
+    export interface Feature {
+        name: string;
+        is_required: boolean;
+        is_known: boolean;
+    }
+
+    export interface AmpInvoiceStateEntry {
+        key: string;
+        value: AmpInvoiceState;
+    }
+
+    export interface AmpInvoiceState {
+        state: InvoiceHtlcState;
+        settle_index: uint64;
+        settle_time: int64;
+        amp_paid_msat: int64;
+    }
+
+    export interface ListInvoicesRequest {
+        pending_only: boolean;
+        index_offset: uint64;
+        num_max_invoices: uint64;
+        reversed: boolean;
+    }
+
+    export interface ListInvoiceResponse {
+        invoices: Invoice[];
+        last_index_offset: uint64;
+        first_index_offset: uint64;
+    }
+
+    export interface SubscribeInvoicesOptions {
+        add_index: number;
+        settle_index: number;
     }
 }

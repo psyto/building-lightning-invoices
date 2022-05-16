@@ -50,4 +50,66 @@ export class LndRpcClient {
     public getInfo(): Promise<Lnd.Info> {
         return promisify(this.lightning.getInfo.bind(this.lightning))({});
     }
+
+    /**
+     * AddInvoice attempts to add a new invoice to the invoice database. Any duplicated invoices
+     * are rejected, therefore all invoices must have a unique payment preimage.
+     * Reference: https://api.lightning.community/?shell#addinvoice
+     * @param options
+     * @returns
+     */
+    public addInvoice(options: Lnd.AddInvoiceInput): Promise<Lnd.AddInvoiceResult> {
+        const invoice = {
+            memo: options.memo ?? "",
+            r_preimage: options.preimage?.toString("base64"),
+            value: options.amt,
+            value_msat: options.amt_msat,
+            description_hash: options.description_hash,
+            export: options.expiry ?? 3600,
+            fallback_addr: options.fallback_addr,
+            private: options.private,
+        };
+        return promisify(this.lightning.addInvoice.bind(this.lightning))(invoice);
+    }
+
+    /**
+     * ListInvoices returns a list of all the invoices currently stored within the database. Any
+     * active debug invoices are ignored. It has full support for paginated responses, allowing
+     * users to query for specific invoices through their add_index. This can be done by using
+     * either the first_index_offset or last_index_offset fields included in the response as the
+     * index_offset of the next request. By default, the first 100 invoices created will be
+     * returned. Backwards pagination is also supported through the Reversed flag.
+     * Reference: https://api.lightning.community/?shell#listinvoices
+     * @param options
+     * @returns
+     */
+    public listInvoices(
+        options: Partial<Lnd.ListInvoicesRequest> = {},
+    ): Promise<Lnd.ListInvoiceResponse> {
+        return promisify(this.lightning.listInvoices.bind(this.lightning))(options);
+    }
+
+    /**
+     * SubscribeInvoices returns a uni-directional stream (server -> client) for notifying the
+     * client of newly added/settled invoices. The caller can optionally specify the add_index
+     * and/or the settle_index. If the add_index is specified, then we'll first start by sending
+     * add invoice events for all invoices with an add_index greater than the specified value. If
+     * the settle_index is specified, the next, we'll send out all settle events for invoices with
+     * a settle_index greater than the specified value. One or both of these fields can be set. If
+     * no fields are set, then we'll only send out the latest add/settle events.
+     * References: https://api.lightning.community/?javascript#subscribecustommessages
+     * @param cb
+     * @param options
+     * @returns
+     */
+    public subscribeInvoices(
+        cb: (invoice: Lnd.AddInvoiceInput) => void,
+        options: Partial<Lnd.SubscribeInvoicesOptions> = {},
+    ) {
+        return new Promise(resolve => {
+            const call = this.lightning.subscribeInvoices(options);
+            call.on("data", cb);
+            call.on("end", resolve);
+        });
+    }
 }
