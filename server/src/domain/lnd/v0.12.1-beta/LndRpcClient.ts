@@ -4,6 +4,7 @@ import * as protoLoader from "@grpc/proto-loader";
 import path from "path";
 import { Lnd } from "./Types";
 import { promisify } from "util";
+import { ILndRpcClient } from "../ILndRpcClient";
 
 process.env.GRPC_SSL_CIPHER_SUITES = "HIGH+ECDSA";
 
@@ -13,7 +14,7 @@ process.env.GRPC_SSL_CIPHER_SUITES = "HIGH+ECDSA";
  * based on instructions for creating a GRPC client from
  * https://github.com/lightningnetwork/lnd/blob/master/docs/grpc/javascript.md
  */
-export class LndRpcClient {
+export class LndRpcClient implements ILndRpcClient {
     protected lightning: any;
 
     constructor(host: string, macaroon: Buffer, cert: Buffer) {
