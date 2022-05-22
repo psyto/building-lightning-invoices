@@ -1,11 +1,12 @@
 import https from "https";
+import { ILndRestClient } from "../ILndRestClient";
 import { Lnd } from "./Types";
 
 /**
  * A domain specific REST client for LND. This class makes requests using
  * the macaroon and TLS cert provided in the constructor.
  */
-export class LndRestClient {
+export class LndRestClient implements ILndRestClient {
     constructor(readonly host: string, readonly macaroon: Buffer, readonly cert: Buffer) {}
 
     /**
