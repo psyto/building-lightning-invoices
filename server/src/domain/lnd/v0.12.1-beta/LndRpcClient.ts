@@ -91,6 +91,16 @@ export class LndRpcClient implements ILndRpcClient {
     }
 
     /**
+     * LookupInvoice attempts to look up an invoice according to its payment hash. The passed
+     * payment hash must be exactly 32 bytes, if not, an error is returned.
+     * @param r_hash_str
+     * @returns
+     */
+    public lookupInvoice(r_hash_str: string): Promise<Lnd.Invoice> {
+        return promisify(this.lightning.lookupInvoice.bind(this.lightning))({ r_hash_str });
+    }
+
+    /**
      * SubscribeInvoices returns a uni-directional stream (server -> client) for notifying the
      * client of newly added/settled invoices. The caller can optionally specify the add_index
      * and/or the settle_index. If the add_index is specified, then we'll first start by sending
