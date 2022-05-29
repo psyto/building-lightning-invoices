@@ -114,7 +114,7 @@ export class LndRpcClient implements ILndRpcClient {
      * @returns
      */
     public subscribeInvoices(
-        cb: (invoice: Lnd.AddInvoiceInput) => void,
+        cb: (invoice: Lnd.Invoice) => void,
         options: Partial<Lnd.SubscribeInvoicesOptions> = {},
     ) {
         return new Promise(resolve => {

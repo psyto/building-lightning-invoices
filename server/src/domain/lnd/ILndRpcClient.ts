@@ -4,7 +4,7 @@ export interface ILndRpcClient {
     addInvoice(options: Lnd.AddInvoiceInput): Promise<Lnd.AddInvoiceResult>;
     listInvoices(options: Partial<Lnd.ListInvoicesRequest>): Promise<Lnd.ListInvoiceResponse>;
     subscribeInvoices(
-        cb: (invoice: Lnd.AddInvoiceInput) => void,
+        cb: (invoice: Lnd.Invoice) => void,
         options: Partial<Lnd.SubscribeInvoicesOptions>,
     );
 }
