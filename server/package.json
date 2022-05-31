@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "../node_modules/.bin/eslint .",
     "start": "../node_modules/.bin/ts-node src/Server.ts",
-    "watch": "nodemon --watch \"src/**\" --ext \"ts\" --exec \"ts-node src/Server.ts\""
+    "watch": "nodemon --watch \"src/**\" --ext \"ts\" --exec \"ts-node src/Server.ts\"",
+    "test": "mocha --require ts-node/register --recursive \"__tests__/**/*.spec.ts\""
   },
   "keywords": [],
   "author": "",
@@ -26,6 +27,12 @@
     "ws": "^8.5.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.15"
+    "@types/chai": "^4.3.1",
+    "@types/mocha": "^9.1.1",
+    "@types/sinon": "^10.0.11",
+    "chai": "^4.3.6",
+    "mocha": "^10.0.0",
+    "nodemon": "^2.0.15",
+    "sinon": "^14.0.0"
   }
 }
