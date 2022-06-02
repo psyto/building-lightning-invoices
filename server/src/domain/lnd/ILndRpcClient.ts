@@ -7,4 +7,6 @@ export interface ILndRpcClient {
         cb: (invoice: Lnd.Invoice) => void,
         options: Partial<Lnd.SubscribeInvoicesOptions>,
     );
+    signMessage(msg: Buffer): Promise<Lnd.SignMessageResponse>;
+    verifyMessage(msg: Buffer, signature: string): Promise<Lnd.VerifyMessageResponse>;
 }

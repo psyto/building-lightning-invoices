@@ -123,4 +123,33 @@ export class LndRpcClient implements ILndRpcClient {
             call.on("end", resolve);
         });
     }
+
+    /**
+     * SignMessage signs a message with this node's private key. The returned signature string is
+     * zbase32 encoded and pubkey recoverable, meaning that only the message digest and signature
+     * are needed for verification.
+     * @param msg
+     */
+    public signMessage(msg: Buffer): Promise<Lnd.SignMessageResponse> {
+        const options = {
+            msg,
+        };
+        return promisify(this.lightning.signMessage.bind(this.lightning))(options);
+    }
+
+    /**
+     * VerifyMessage verifies a signature over a msg. The signature must be zbase32 encoded and
+     * signed by an active node in the resident node's channel database. In addition to returning
+     * the validity of the signature, VerifyMessage also returns the recovered pubkey from the
+     * signature.
+     * @param options
+     * @returns
+     */
+    public verifyMessage(msg: Buffer, signature: string): Promise<Lnd.VerifyMessageResponse> {
+        const options = {
+            msg,
+            signature,
+        };
+        return promisify(this.lightning.verifyMessage.bind(this.lightning))(options);
+    }
 }

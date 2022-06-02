@@ -257,4 +257,13 @@ export namespace Lnd {
         add_index: number;
         settle_index: number;
     }
+
+    export interface SignMessageResponse {
+        signature: string;
+    }
+
+    export interface VerifyMessageResponse {
+        valid: boolean;
+        pubkey: string;
+    }
 }
