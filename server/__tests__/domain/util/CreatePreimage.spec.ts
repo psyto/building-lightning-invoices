@@ -13,7 +13,7 @@ describe("function: createPreimage", () => {
 
         // assert
         expect(result.toString("hex")).to.equal(
-            "ab6ed44ee4d408c47b02b6c175164efe1a55c65a605f6155fbd922da82a36349",
+            "a66466289243346de26921e1b135d73cef5cc7b51dd827ca0ebe70e43bb299d3",
         );
     });
 });

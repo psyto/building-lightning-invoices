@@ -1,6 +1,6 @@
 import { sha256 } from "./Sha256";
 
-export function createPreimage(previous: string, signature: string) {
-    const input = Buffer.concat([Buffer.from(previous, "hex"), Buffer.from(signature)]);
+export function createPreimage(local: string, remote: string) {
+    const input = Buffer.from(local + remote);
     return sha256(input);
 }
