@@ -7,6 +7,11 @@ import serveStatic from "serve-static";
 import { Options } from "./Options";
 import { SocketServer } from "./SocketServer";
 import { sampleApi } from "./api/SampleApi";
+import { LndInvoiceRepository } from "./domain/lnd/LndInvoiceRepository";
+import { LndRpcClient } from "./domain/lnd/v0.12.1-beta/LndRpcClient";
+import { invoiceApi } from "./api/InvoiceApi";
+import { AppController } from "./domain/AppController";
+import { LndMessageSigner } from "./domain/lnd/LndMessageSigner";
 
 /**
  * Entry point for our application. This is responsible for setting up
@@ -35,8 +40,23 @@ async function run() {
         res.sendFile(path.join(__dirname, "../public/index.html"));
     });
 
+    const lndRpcClient = new LndRpcClient(
+        options.lndRpcHost,
+        options.lndAdminMacaroon,
+        options.lndCert,
+    );
+
+    // create a invoice repo
+    const lndInvoiceRepo = new LndInvoiceRepository(lndRpcClient);
+    const lndMessageSigner = new LndMessageSigner(lndRpcClient);
+    const appController = new AppController(lndInvoiceRepo, lndMessageSigner);
+
+    // start the application logic
+    await appController.start();
+
     // mount our API routers
     app.use(sampleApi());
+    app.use(invoiceApi(appController));
 
     // start the server on the port
     const server = app.listen(Number(options.port), () => {
