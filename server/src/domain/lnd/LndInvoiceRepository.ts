@@ -1,8 +1,8 @@
-import { EventEmitter } from "stream";
+import { AppInvoice } from "../AppInvoice";
 import { ILndRpcClient } from "./ILndRpcClient";
 import { Lnd } from "./v0.12.1-beta/Types";
 
-export type InvoiceHandler = (invoice: Lnd.Invoice) => void;
+export type InvoiceHandler = (invoice: AppInvoice) => void;
 
 export class LndInvoiceRepository {
     public cache: Map<string, Lnd.Invoice>;
@@ -61,9 +61,18 @@ export class LndInvoiceRepository {
         // update the cache
         this.cache.set(invoice.r_hash.toString("hex"), invoice);
 
+        // convert lnd invoice into AppInvoice
+        const appInvoice: AppInvoice = {
+            memo: invoice.memo,
+            preimage: invoice.r_preimage?.toString("hex"),
+            hash: invoice.r_hash.toString("hex"),
+            valueMsat: invoice.value_msat,
+            settled: invoice.settled,
+        };
+
         // emit to all async event handlers
         for (const handler of this.handlers) {
-            await handler(invoice);
+            await handler(appInvoice);
         }
     }
 }
