@@ -1,32 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { useSocket } from "../../hooks/UseSocket";
 import { useApi } from "../../hooks/UseApi";
-import { Greeting } from "./components/Greeting";
-import { Time } from "./components/Time";
+import { AppInfo } from "../../services/ApiTypes";
+import { OwnerList } from "./components/OwnerList";
+import { InvoiceForm } from "./components/InvoiceForm";
 
 export const HomeScene = () => {
     const api = useApi();
-    const [greeting, setGreeting] = useState<string>();
-    const [time, setTime] = useState<string>();
+    const [owners, setOwners] = useState<AppInfo[]>([]);
 
     useEffect(() => {
-        api.fetchGreeting().then(setGreeting);
+        api.getOwners().then(allOwners => setOwners(allOwners.reverse()));
     }, []);
 
-    useSocket("time", (time: string) => {
-        setTime(time);
+    useSocket("owner", (owner: AppInfo) => {
+        const copy = owners.slice();
+        copy.unshift(owner);
+        setOwners(copy);
     });
 
     return (
         <div className="container">
             <div className="row">
                 <div className="col">
-                    <Greeting greeting={greeting} />
+                    <InvoiceForm next={owners[0]?.next} />
                 </div>
             </div>
             <div className="row">
                 <div className="col">
-                    <Time time={time} />
+                    <OwnerList owners={owners} />
                 </div>
             </div>
         </div>

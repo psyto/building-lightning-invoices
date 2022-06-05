@@ -1,3 +1,4 @@
+import { AppInfo, CreateInvoiceRequest, CreateInvoiceResult } from "./ApiTypes";
 
 export class ApiService {
     constructor(readonly host: string = "http://127.0.0.1:8001") {}
@@ -7,7 +8,27 @@ export class ApiService {
         return await res.json();
     }
 
-    public async fetchGreeting(): Promise<string> {
-        return this.get("/api/greeting");
+    protected async post<T>(path: string, data: any): Promise<T> {
+        const res = await fetch(path, {
+            credentials: "include",
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        });
+        return await res.json();
+    }
+
+    public async getOwners(): Promise<AppInfo[]> {
+        return this.get("/api/owners");
+    }
+
+    public async createInvoice(signature: string): Promise<CreateInvoiceResult> {
+        const data: CreateInvoiceRequest = {
+            signature,
+        };
+        return this.post("/api/invoices", data);
     }
 }
