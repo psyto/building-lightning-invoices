@@ -6,6 +6,7 @@ import { AppInvoice } from "./AppInvoice";
 
 export class AppController {
     public chain: string[];
+    public invoices: AppInvoice[];
     public signatures: string[];
 
     public get chainTip(): string {
@@ -20,6 +21,7 @@ export class AppController {
         readonly invoiceRepository: LndInvoiceRepository,
         readonly signer: LndMessageSigner,
     ) {
+        this.invoices = [];
         this.chain = [];
         this.signatures = [];
         this.invoiceRepository.addHandler(this.handleInvoice.bind(this));
@@ -55,29 +57,14 @@ export class AppController {
         const valueMsat = 50_000;
         const preimage = createPreimage(this.chainTipSignature, remoteSignature);
         const memo = "own_" + this.chainTip;
-        try {
-            const paymentRequest = await this.invoiceRepository.addInvoice(
-                valueMsat,
-                memo,
-                preimage,
-            );
-            return {
-                success: true,
-                paymentRequest,
-            };
-        } catch (ex) {
-            return {
-                success: false,
-                error: ex.message,
-            };
-        }
+        return await this.invoiceRepository.addInvoice(valueMsat, memo, preimage);
     }
 
     public async handleInvoice(invoice: AppInvoice) {
         if (invoice.settled && invoice.memo.startsWith("own_")) {
+            this.invoices.push(invoice);
             this.chain.push(invoice.preimage);
             this.signatures.push(await this.signChainTip());
-
             console.log(
                 "invoice",
                 invoice.memo,

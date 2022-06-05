@@ -1,4 +1,5 @@
 import { AppInvoice } from "../AppInvoice";
+import { CreateInvoiceResult } from "../CreateInvoiceResult";
 import { ILndRpcClient } from "./ILndRpcClient";
 import { Lnd } from "./v0.12.1-beta/Types";
 
@@ -21,13 +22,27 @@ export class LndInvoiceRepository {
      *
      * @returns
      */
-    public async addInvoice(valueMsat: number, memo: string, preimage: Buffer): Promise<string> {
-        const invoice = await this.client.addInvoice({
-            amt_msat: valueMsat,
-            memo,
-            preimage,
-        });
-        return invoice.payment_request;
+    public async addInvoice(
+        valueMsat: number,
+        memo: string,
+        preimage: Buffer,
+    ): Promise<CreateInvoiceResult> {
+        try {
+            const invoice = await this.client.addInvoice({
+                amt_msat: valueMsat,
+                memo,
+                preimage,
+            });
+            return {
+                success: true,
+                paymentRequest: invoice.payment_request,
+            };
+        } catch (ex) {
+            return {
+                success: false,
+                error: ex.message,
+            };
+        }
     }
 
     /**
