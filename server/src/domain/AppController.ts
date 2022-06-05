@@ -3,11 +3,14 @@ import { LndInvoiceRepository } from "./lnd/LndInvoiceRepository";
 import { LndMessageSigner } from "./lnd/LndMessageSigner";
 import { createPreimage } from "./util/CreatePreimage";
 import { AppInvoice } from "./AppInvoice";
+import { AppInfo } from "./AppInfo";
 
 export class AppController {
     public chain: string[];
     public invoices: AppInvoice[];
     public signatures: string[];
+    public infos: AppInfo[];
+    public receiver: (info: AppInfo) => void;
 
     public get chainTip(): string {
         return this.chain[this.chain.length - 1];
@@ -21,6 +24,7 @@ export class AppController {
         readonly invoiceRepository: LndInvoiceRepository,
         readonly signer: LndMessageSigner,
     ) {
+        this.infos = [];
         this.invoices = [];
         this.chain = [];
         this.signatures = [];
@@ -63,8 +67,21 @@ export class AppController {
     public async handleInvoice(invoice: AppInvoice) {
         if (invoice.settled && invoice.memo.startsWith("own_")) {
             this.invoices.push(invoice);
+
+            const info: AppInfo = {
+                chain: this.chainTip,
+                valueMsat: invoice.valueMsat,
+                signature: this.chainTipSignature,
+                next: invoice.preimage,
+            };
+            this.infos.push(info);
             this.chain.push(invoice.preimage);
             this.signatures.push(await this.signChainTip());
+
+            if (this.receiver) {
+                this.receiver(info);
+            }
+
             console.log(
                 "invoice",
                 invoice.memo,

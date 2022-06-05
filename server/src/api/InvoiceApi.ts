@@ -16,7 +16,17 @@ export function invoiceApi(app: AppController): express.Router {
     // understand async code, but we can easily adapt Express by calling
     // a promise based handler and if it fails catching the error and
     // supplying it with `next` to allow Express to handle the error.
+    router.get("/api/owners", (req, res, next) => getOwners(req, res).catch(next));
     router.post("/api/invoices", (req, res, next) => createInvoice(req, res).catch(next));
+
+    /**
+     * Handler that creates an invoice
+     * @param req
+     * @param res
+     */
+    async function getOwners(req: express.Request, res: express.Response) {
+        res.json(app.infos);
+    }
 
     /**
      * Handler that creates an invoice
@@ -33,10 +43,10 @@ export function invoiceApi(app: AppController): express.Router {
         const result = await app.createInvoice(body.signature);
 
         if (!result.success) {
-            return res.status(400).json({ error: result.error });
+            return res.status(400).json(result);
         }
 
-        res.json({ paymentRequest: result.paymentRequest });
+        res.json(result);
     }
 
     return router;

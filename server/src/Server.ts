@@ -12,6 +12,7 @@ import { LndRpcClient } from "./domain/lnd/v0.12.1-beta/LndRpcClient";
 import { invoiceApi } from "./api/InvoiceApi";
 import { AppController } from "./domain/AppController";
 import { LndMessageSigner } from "./domain/lnd/LndMessageSigner";
+import { AppInfo } from "./domain/AppInfo";
 
 /**
  * Entry point for our application. This is responsible for setting up
@@ -69,10 +70,8 @@ async function run() {
     // start listening for http connections using the http server
     socketServer.listen(server);
 
-    // broadcast time to all clients
-    setInterval(() => {
-        socketServer.broadcast("time", new Date().toISOString());
-    }, 1000);
+    // broadcast updates to the client
+    appController.receiver = (info: AppInfo) => socketServer.broadcast("owner", info);
 }
 
 run().catch(ex => {
