@@ -60,12 +60,12 @@ export class AppController {
 
         const valueMsat = 50_000;
         const preimage = createPreimage(this.chainTipSignature, remoteSignature);
-        const memo = "own_" + this.chainTip;
+        const memo = createMemo(this.chainTip);
         return await this.invoiceRepository.addInvoice(valueMsat, memo, preimage);
     }
 
     public async handleInvoice(invoice: AppInvoice) {
-        if (invoice.settled && invoice.memo.startsWith("own_")) {
+        if (invoice.settled && isAppInvoice(invoice.memo)) {
             this.invoices.push(invoice);
 
             const info: AppInfo = {
@@ -92,4 +92,12 @@ export class AppController {
             );
         }
     }
+}
+
+function isAppInvoice(memo: string) {
+    return memo.startsWith("own_");
+}
+
+function createMemo(hash: string) {
+    return `own_${hash}`;
 }
