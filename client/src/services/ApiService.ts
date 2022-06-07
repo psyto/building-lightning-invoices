@@ -8,7 +8,7 @@ export class ApiService {
         return await res.json();
     }
 
-    protected async post<T>(path: string, data: any): Promise<T> {
+    protected async post<T>(path: string, data: unknown): Promise<T> {
         const res = await fetch(path, {
             credentials: "include",
             method: "POST",
