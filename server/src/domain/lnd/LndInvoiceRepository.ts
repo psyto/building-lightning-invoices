@@ -77,13 +77,13 @@ export class LndInvoiceRepository {
         this.cache.set(invoice.r_hash.toString("hex"), invoice);
 
         // convert lnd invoice into AppInvoice
-        const appInvoice: AppInvoice = {
-            memo: invoice.memo,
-            preimage: invoice.r_preimage?.toString("hex"),
-            hash: invoice.r_hash.toString("hex"),
-            valueMsat: invoice.value_msat,
-            settled: invoice.settled,
-        };
+        const appInvoice = new AppInvoice(
+            invoice.memo,
+            invoice.r_preimage?.toString("hex"),
+            invoice.r_hash.toString("hex"),
+            invoice.value_msat,
+            invoice.settled,
+        );
 
         // emit to all async event handlers
         for (const handler of this.handlers) {

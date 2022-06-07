@@ -1,7 +1,9 @@
-export interface AppInvoice {
-    memo: string;
-    preimage: string;
-    hash: string;
-    settled: boolean;
-    valueMsat: string;
+export class AppInvoice {
+    constructor(
+        public memo: string,
+        public preimage: string,
+        public hash: string,
+        public valueMsat: string,
+        public settled: boolean,
+    ) {}
 }
