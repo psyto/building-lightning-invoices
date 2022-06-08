@@ -9,12 +9,15 @@ export const InvoiceForm = ({
     identifier: string;
     startSats: number;
 }) => {
+    console.log("identifier", identifier);
+    console.log("startSats", startSats);
+
     const [sig, setSig] = useState<string>();
     const [sats, setSats] = useState<number>(startSats);
     const [invoice, setInvoice] = useState<CreateInvoiceResult>();
     const api = useApi();
 
-    function signatureChanged(e: React.ChangeEvent<HTMLTextAreaElement>) {
+    function sigChanged(e: React.ChangeEvent<HTMLTextAreaElement>) {
         const value = e.target.value;
         setSig(value);
         if (value) {
@@ -50,17 +53,17 @@ export const InvoiceForm = ({
             </div>
             <div className="form-group">
                 <p>Step 3. Paste your signature to receive an invoice:</p>
-                <textarea
-                    className="form-control"
-                    value={sig}
-                    onChange={signatureChanged}
-                ></textarea>
+                <textarea className="form-control" value={sig} onChange={sigChanged}></textarea>
             </div>
             {invoice && (
                 <div className="form-group">
                     <p>Step 4. Pay the invoice</p>
                     {invoice.success ? (
-                        <textarea className="form-control" value={invoice.paymentRequest} />
+                        <textarea
+                            className="form-control"
+                            value={invoice.paymentRequest}
+                            readOnly
+                        />
                     ) : (
                         <small className="warning">{invoice.error}</small>
                     )}
