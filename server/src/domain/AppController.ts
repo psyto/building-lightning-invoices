@@ -58,11 +58,7 @@ export class AppController {
     }
 
     public async handleInvoice(invoice: Invoice) {
-        if (
-            invoice.settled &&
-            isAppInvoice(invoice.memo) &&
-            getMemoParent(invoice) === this.chainTip.identifier
-        ) {
+        if (invoice.settles(this.chainTip)) {
             const settled = this.chainTip;
             settled.invoice = invoice;
             settled.next = invoice.preimage;
@@ -81,14 +77,6 @@ export class AppController {
     }
 }
 
-function isAppInvoice(memo: string) {
-    return memo.startsWith("buy_");
-}
-
 function createMemo(hash: string, nodeId: string) {
     return `buy_${hash}_${nodeId}`;
-}
-
-function getMemoParent(invoice: Invoice) {
-    return invoice.memo.split("_")[1];
 }
