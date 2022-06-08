@@ -11,7 +11,7 @@ export class Leader {
     }
 
     public get nodeId(): string {
-        return this.invoice?.memo.split("_")[1];
+        return this.invoice?.memo.split("_")[2];
     }
 
     public toJSON() {

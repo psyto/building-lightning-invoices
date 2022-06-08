@@ -49,7 +49,7 @@ export const InvoiceForm = ({
                 <h3>{identifier}</h3>
             </div>
             <div className="form-group">
-                <p>Step 3. Request an invoice using your signature</p>
+                <p>Step 3. Paste your signature to receive an invoice:</p>
                 <textarea
                     className="form-control"
                     value={sig}

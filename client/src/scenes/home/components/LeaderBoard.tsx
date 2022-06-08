@@ -7,8 +7,9 @@ export const LeaderBoard = ({ leaders }: { leaders: LeaderRecord[] }) => {
         <table className="table">
             <thead>
                 <tr>
-                    <td>Identifier</td>
-                    <td>Secret</td>
+                    <td>Node Id</td>
+                    <td>Sats</td>
+                    <td>Date</td>
                 </tr>
             </thead>
             <tbody>
