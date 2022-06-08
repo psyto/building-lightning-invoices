@@ -25,9 +25,10 @@ export class ApiService {
         return this.get("/api/owners");
     }
 
-    public async createInvoice(signature: string): Promise<CreateInvoiceResult> {
+    public async createInvoice(signature: string, sats: number): Promise<CreateInvoiceResult> {
         const data: CreateInvoiceRequest = {
             signature,
+            sats,
         };
         return this.post("/api/invoices", data);
     }

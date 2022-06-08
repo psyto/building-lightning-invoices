@@ -24,7 +24,10 @@ export const HomeScene = () => {
         <div className="container">
             <div className="row">
                 <div className="col">
-                    <InvoiceForm identifier={owners[0]?.identifier} />
+                    <InvoiceForm
+                        identifier={owners[0]?.identifier}
+                        startSats={Number(owners[1]?.invoice.valueMsat || 1)}
+                    />
                 </div>
             </div>
             <div className="row">
