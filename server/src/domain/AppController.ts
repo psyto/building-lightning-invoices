@@ -4,6 +4,7 @@ import { LndMessageSigner } from "./lnd/LndMessageSigner";
 import { createPreimage } from "./util/CreatePreimage";
 import { Invoice } from "./Invoice";
 import { Leader } from "./Leader";
+import { LeaderFactory } from "./LeaderFactory";
 
 export class AppController {
     public chain: Leader[];
@@ -16,26 +17,29 @@ export class AppController {
     constructor(
         readonly invoiceRepository: LndInvoiceRepository,
         readonly signer: LndMessageSigner,
+        readonly linkFactory: LeaderFactory,
     ) {
         this.invoiceRepository.addHandler(this.handleInvoice.bind(this));
         this.chain = [];
     }
 
+    /**
+     * Starts the application by creating the initial link and
+     * synchronizing against the invoice repository
+     * @param seed
+     * @param startSats
+     */
     public async start(seed: string, startSats: number) {
-        const firstSignature = await this.signPreimage(seed);
-        this.chain.push(new Leader(seed, firstSignature, startSats));
+        // create the initial link in the ownership chain
+        const firstLink = await this.linkFactory.createFromSeed(seed, startSats);
+        this.chain.push(firstLink);
 
         // initiate synchronization of invoices
         await this.invoiceRepository.sync();
     }
 
-    public async signPreimage(preimage: string): Promise<string> {
-        const buffer = Buffer.from(preimage);
-        return await this.signer.sign(buffer);
-    }
-
     /**
-     *
+     * Creates an invoice
      * @param remoteSignature
      * @returns
      */
@@ -43,13 +47,15 @@ export class AppController {
         remoteSignature: string,
         sats: number,
     ): Promise<CreateInvoiceResult> {
-        console.log("creating", this.chainTip.identifier, remoteSignature);
+        // verify the invoice provided by the user
         const verification = await this.signer.verify(
             Buffer.from(this.chainTip.identifier),
             remoteSignature,
         );
 
-        if (!verification.valid) return { success: false, error: "Invalid signature" };
+        if (!verification.valid) {
+            return { success: false, error: "Invalid signature" };
+        }
 
         const owner = verification.pubkey;
         const preimage = createPreimage(this.chainTip.localSignature, remoteSignature, sats);
@@ -59,19 +65,17 @@ export class AppController {
 
     public async handleInvoice(invoice: Invoice) {
         if (invoice.settles(this.chainTip)) {
+            // settle the current chain tip
             const settled = this.chainTip;
-            settled.invoice = invoice;
-            settled.next = invoice.preimage;
+            settled.settle(invoice);
 
-            const nextValue = invoice.preimage;
-            const nextSignature = await this.signPreimage(nextValue);
-            const next = new Leader(nextValue, nextSignature, Number(settled.invoice.valueSat) + 1);
-            this.chain.push(next);
+            // create the next blank link
+            const nextLink = await this.linkFactory.createFromSettled(settled);
+            this.chain.push(nextLink);
 
-            console.log(settled, next);
-
+            // send to
             if (this.receiver) {
-                this.receiver([settled, next]);
+                this.receiver([settled, nextLink]);
             }
         }
     }

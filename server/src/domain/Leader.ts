@@ -1,7 +1,6 @@
 import { Invoice } from "./Invoice";
 
 export class Leader {
-    public next: string;
     public invoice: Invoice;
 
     constructor(public identifier: string, public localSignature: string, public minSats: number) {}
@@ -12,6 +11,14 @@ export class Leader {
 
     public get nodeId(): string {
         return this.invoice?.forNodeId;
+    }
+
+    public get next(): string {
+        return this.invoice?.preimage;
+    }
+
+    public settle(invoice: Invoice) {
+        this.invoice = invoice;
     }
 
     public toJSON() {

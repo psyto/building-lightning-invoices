@@ -4,8 +4,8 @@ import { Lnd } from "./v0.12.1-beta/Types";
 export class LndMessageSigner {
     constructor(readonly client: ILndRpcClient) {}
 
-    public async sign(msg: Buffer): Promise<string> {
-        const result = await this.client.signMessage(msg);
+    public async sign(msg: string): Promise<string> {
+        const result = await this.client.signMessage(Buffer.from(msg));
         return result.signature;
     }
 
