@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useApi } from "../../../hooks/UseApi";
 import { CreateInvoiceResult } from "../../../services/ApiTypes";
 
-export const InvoiceForm = ({ next }: { next: string }) => {
+export const InvoiceForm = ({ identifier }: { identifier: string }) => {
     const [sig, setSig] = useState<string>();
     const [invoice, setInvoice] = useState<CreateInvoiceResult>();
     const api = useApi();
@@ -18,13 +18,13 @@ export const InvoiceForm = ({ next }: { next: string }) => {
     useEffect(() => {
         setSig("");
         setInvoice(undefined);
-    }, [next]);
+    }, [identifier]);
 
     return (
         <form className="form">
             <div className="form-group">
                 <p>Step 1. Sign a message for the following:</p>
-                <h3>{next}</h3>
+                <h3>{identifier}</h3>
             </div>
             <div className="form-group">
                 <p>Step 2. Request an invoice using your signature</p>
