@@ -83,7 +83,3 @@ function isAppInvoice(memo: string) {
 function createMemo(hash: string, nodeId: string) {
     return `buy_${hash}_${nodeId}`;
 }
-
-function parseMemo(memo: string): string[] {
-    return memo.split("_").slice(1);
-}

@@ -10,12 +10,17 @@ export class Leader {
         return this.invoice !== undefined;
     }
 
+    public get nodeId(): string {
+        return this.invoice?.memo.split("_")[1];
+    }
+
     public toJSON() {
         if (this.isSettled) {
             return {
                 identifier: this.identifier,
                 localSignature: this.localSignature,
                 invoice: this.invoice,
+                nodeId: this.nodeId,
                 next: this.next,
                 isSettled: this.isSettled,
             };
