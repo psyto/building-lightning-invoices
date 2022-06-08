@@ -7,7 +7,7 @@ import { Leader } from "./Leader";
 
 export class AppController {
     public chain: Leader[];
-    public receiver: (info: Leader) => void;
+    public receiver: (info: Leader[]) => void;
 
     public get chainTip(): Leader {
         return this.chain[this.chain.length - 1];
@@ -21,9 +21,9 @@ export class AppController {
         this.chain = [];
     }
 
-    public async start(seed: string) {
+    public async start(seed: string, startSats: number) {
         const firstSignature = await this.signPreimage(seed);
-        this.chain.push(new Leader(seed, firstSignature));
+        this.chain.push(new Leader(seed, firstSignature, startSats));
 
         // initiate synchronization of invoices
         await this.invoiceRepository.sync();
@@ -65,12 +65,13 @@ export class AppController {
 
             const nextValue = invoice.preimage;
             const nextSignature = await this.signPreimage(nextValue);
-            this.chain.push(new Leader(nextValue, nextSignature));
+            const next = new Leader(nextValue, nextSignature, Number(settled.invoice.valueSat) + 1);
+            this.chain.push(next);
 
-            console.log(settled);
+            console.log(settled, next);
 
             if (this.receiver) {
-                this.receiver(settled);
+                this.receiver([settled, next]);
             }
         }
     }

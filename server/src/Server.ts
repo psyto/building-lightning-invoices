@@ -53,7 +53,10 @@ async function run() {
     const appController = new AppController(lndInvoiceRepo, lndMessageSigner);
 
     // start the application logic
-    await appController.start("0000000000000000000000000000000000000000000000000000000000000000");
+    await appController.start(
+        "0000000000000000000000000000000000000000000000000000000000000000",
+        1000,
+    );
 
     // mount our API routers
     app.use(sampleApi());
@@ -71,7 +74,7 @@ async function run() {
     socketServer.listen(server);
 
     // broadcast updates to the client
-    appController.receiver = (info: Leader) => socketServer.broadcast("owner", info);
+    appController.receiver = (leaders: Leader[]) => socketServer.broadcast("leaders", leaders);
 }
 
 run().catch(ex => {
