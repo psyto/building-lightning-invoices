@@ -9,11 +9,11 @@ describe("function: createPreimage", () => {
             "rnqyje9tkhhmeaq1yjuok7nqkqumyhduxwijjahqaff718o8q45b6in883uit5dxoq7z59r8bhso99nwinbjo6efb8coro734jebete6";
 
         // act
-        const result = createPreimage(previous, signature);
+        const result = createPreimage(previous, signature, 1);
 
         // assert
         expect(result.toString("hex")).to.equal(
-            "a66466289243346de26921e1b135d73cef5cc7b51dd827ca0ebe70e43bb299d3",
+            "f9e15e200f506f2519fd5fbd3b64bb2add4adab97897f01022b86a5710166ecb",
         );
     });
 });

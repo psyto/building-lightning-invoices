@@ -52,7 +52,7 @@ export class AppController {
         if (!verification.valid) return { success: false, error: "Invalid signature" };
 
         const owner = verification.pubkey;
-        const preimage = createPreimage(this.chainTip.localSignature, remoteSignature);
+        const preimage = createPreimage(this.chainTip.localSignature, remoteSignature, sats);
         const memo = createMemo(this.chainTip.identifier, owner);
         return await this.invoiceRepository.addInvoice(sats, memo, preimage);
     }
