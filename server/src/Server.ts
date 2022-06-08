@@ -12,7 +12,7 @@ import { LndRpcClient } from "./domain/lnd/v0.12.1-beta/LndRpcClient";
 import { invoiceApi } from "./api/InvoiceApi";
 import { AppController } from "./domain/AppController";
 import { LndMessageSigner } from "./domain/lnd/LndMessageSigner";
-import { AppInfo } from "./domain/AppInfo";
+import { Leader } from "./domain/Leader";
 
 /**
  * Entry point for our application. This is responsible for setting up
@@ -53,7 +53,7 @@ async function run() {
     const appController = new AppController(lndInvoiceRepo, lndMessageSigner);
 
     // start the application logic
-    await appController.start();
+    await appController.start("0000000000000000000000000000000000000000000000000000000000000000");
 
     // mount our API routers
     app.use(sampleApi());
@@ -71,7 +71,7 @@ async function run() {
     socketServer.listen(server);
 
     // broadcast updates to the client
-    appController.receiver = (info: AppInfo) => socketServer.broadcast("owner", info);
+    appController.receiver = (info: Leader) => socketServer.broadcast("owner", info);
 }
 
 run().catch(ex => {

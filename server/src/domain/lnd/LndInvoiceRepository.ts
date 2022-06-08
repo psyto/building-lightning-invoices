@@ -1,9 +1,9 @@
-import { AppInvoice } from "../AppInvoice";
+import { Invoice } from "../Invoice";
 import { CreateInvoiceResult } from "../CreateInvoiceResult";
 import { ILndRpcClient } from "./ILndRpcClient";
 import { Lnd } from "./v0.12.1-beta/Types";
 
-export type InvoiceHandler = (invoice: AppInvoice) => void;
+export type InvoiceHandler = (invoice: Invoice) => void;
 
 export class LndInvoiceRepository {
     public cache: Map<string, Lnd.Invoice>;
@@ -77,12 +77,13 @@ export class LndInvoiceRepository {
         this.cache.set(invoice.r_hash.toString("hex"), invoice);
 
         // convert lnd invoice into AppInvoice
-        const appInvoice = new AppInvoice(
+        const appInvoice = new Invoice(
             invoice.memo,
             invoice.r_preimage?.toString("hex"),
             invoice.r_hash.toString("hex"),
             invoice.value_msat,
             invoice.settled,
+            Number(invoice.settle_date),
         );
 
         // emit to all async event handlers

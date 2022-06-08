@@ -2,49 +2,36 @@ import { CreateInvoiceResult } from "./CreateInvoiceResult";
 import { LndInvoiceRepository } from "./lnd/LndInvoiceRepository";
 import { LndMessageSigner } from "./lnd/LndMessageSigner";
 import { createPreimage } from "./util/CreatePreimage";
-import { AppInvoice } from "./AppInvoice";
-import { AppInfo } from "./AppInfo";
+import { Invoice } from "./Invoice";
+import { Leader } from "./Leader";
 
 export class AppController {
-    public chain: string[];
-    public invoices: AppInvoice[];
-    public signatures: string[];
-    public infos: AppInfo[];
-    public receiver: (info: AppInfo) => void;
+    public chain: Leader[];
+    public receiver: (info: Leader) => void;
 
-    public get chainTip(): string {
+    public get chainTip(): Leader {
         return this.chain[this.chain.length - 1];
-    }
-
-    public get chainTipSignature(): string {
-        return this.signatures[this.signatures.length - 1];
     }
 
     constructor(
         readonly invoiceRepository: LndInvoiceRepository,
         readonly signer: LndMessageSigner,
     ) {
-        this.infos = [];
-        this.invoices = [];
-        this.chain = [];
-        this.signatures = [];
         this.invoiceRepository.addHandler(this.handleInvoice.bind(this));
+        this.chain = [];
     }
 
-    public async start() {
-        // Initialize to 32 zero bytes
-        this.chain.push(Buffer.alloc(32).toString("hex"));
-
-        // Create our first signature for the
-        this.signatures.push(await this.signChainTip());
+    public async start(seed: string) {
+        const firstSignature = await this.signPreimage(seed);
+        this.chain.push(new Leader(seed, firstSignature));
 
         // initiate synchronization of invoices
         await this.invoiceRepository.sync();
     }
 
-    public async signChainTip(): Promise<string> {
-        const firstSignature = await this.signer.sign(Buffer.from(this.chainTip));
-        return firstSignature;
+    public async signPreimage(preimage: string): Promise<string> {
+        const buffer = Buffer.from(preimage);
+        return await this.signer.sign(buffer);
     }
 
     /**
@@ -53,51 +40,48 @@ export class AppController {
      * @returns
      */
     public async createInvoice(remoteSignature: string): Promise<CreateInvoiceResult> {
-        console.log("creating", this.chainTip, remoteSignature);
-        const verification = await this.signer.verify(Buffer.from(this.chainTip), remoteSignature);
+        console.log("creating", this.chainTip.identifier, remoteSignature);
+        const verification = await this.signer.verify(
+            Buffer.from(this.chainTip.identifier),
+            remoteSignature,
+        );
 
         if (!verification.valid) return { success: false, error: "Invalid signature" };
 
+        const owner = verification.pubkey;
         const valueMsat = 50_000;
-        const preimage = createPreimage(this.chainTipSignature, remoteSignature);
-        const memo = createMemo(this.chainTip);
+        const preimage = createPreimage(this.chainTip.localSignature, remoteSignature);
+        const memo = createMemo(this.chainTip.identifier, owner);
         return await this.invoiceRepository.addInvoice(valueMsat, memo, preimage);
     }
 
-    public async handleInvoice(invoice: AppInvoice) {
+    public async handleInvoice(invoice: Invoice) {
         if (invoice.settled && isAppInvoice(invoice.memo)) {
-            this.invoices.push(invoice);
+            const settled = this.chainTip;
+            settled.invoice = invoice;
+            settled.next = invoice.preimage;
 
-            const info: AppInfo = {
-                chain: this.chainTip,
-                valueMsat: invoice.valueMsat,
-                signature: this.chainTipSignature,
-                next: invoice.preimage,
-            };
-            this.infos.push(info);
-            this.chain.push(invoice.preimage);
-            this.signatures.push(await this.signChainTip());
+            const nextValue = invoice.preimage;
+            const nextSignature = await this.signPreimage(nextValue);
+            this.chain.push(new Leader(nextValue, nextSignature));
+
+            console.log(settled);
 
             if (this.receiver) {
-                this.receiver(info);
+                this.receiver(settled);
             }
-
-            console.log(
-                "invoice",
-                invoice.memo,
-                "chain",
-                this.chain.map(p => p),
-                "signatures",
-                this.signatures,
-            );
         }
     }
 }
 
 function isAppInvoice(memo: string) {
-    return memo.startsWith("own_");
+    return memo.startsWith("buy_");
 }
 
-function createMemo(hash: string) {
-    return `own_${hash}`;
+function createMemo(hash: string, nodeId: string) {
+    return `buy_${hash}_${nodeId}`;
+}
+
+function parseMemo(memo: string): string[] {
+    return memo.split("_").slice(1);
 }

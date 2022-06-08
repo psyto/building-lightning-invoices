@@ -25,7 +25,7 @@ export function invoiceApi(app: AppController): express.Router {
      * @param res
      */
     async function getOwners(req: express.Request, res: express.Response) {
-        res.json(app.infos);
+        res.json(app.chain);
     }
 
     /**
