@@ -1,8 +1,8 @@
 import React from "react";
-import { Leader } from "../../../services/ApiTypes";
+import { Leader as LeaderRecord } from "../../../services/ApiTypes";
 import { Leader } from "./Leader";
 
-export const LeaderBoard = ({ leaders }: { leaders: Leader[] }) => {
+export const LeaderBoard = ({ leaders }: { leaders: LeaderRecord[] }) => {
     return (
         <table className="table">
             <thead>

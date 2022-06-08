@@ -1,7 +1,7 @@
 import React from "react";
-import { Leader } from "../../../services/ApiTypes";
+import { Leader as LeaderRecord } from "../../../services/ApiTypes";
 
-export const Leader = ({ leader }: { leader: Leader }) => {
+export const Leader = ({ leader }: { leader: LeaderRecord }) => {
     return (
         <tr>
             <td>{leader.identifier}</td>
