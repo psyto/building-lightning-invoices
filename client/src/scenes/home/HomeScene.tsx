@@ -13,9 +13,17 @@ export const HomeScene = () => {
         api.getOwners().then(allOwners => setOwners(allOwners.reverse()));
     }, []);
 
-    useSocket("owner", (owner: Leader) => {
+    useSocket("leaders", (leaders: Leader[]) => {
         const copy = owners.slice();
-        copy.unshift(owner);
+        for (const leader of leaders) {
+            const index = copy.findIndex(p => p.identifier === leader.identifier);
+            if (index >= 0) {
+                copy[index] = leader;
+                continue;
+            } else {
+                copy.unshift(leader);
+            }
+        }
         setOwners(copy);
     });
 
