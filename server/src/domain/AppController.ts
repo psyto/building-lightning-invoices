@@ -39,7 +39,10 @@ export class AppController {
      * @param remoteSignature
      * @returns
      */
-    public async createInvoice(remoteSignature: string): Promise<CreateInvoiceResult> {
+    public async createInvoice(
+        remoteSignature: string,
+        sats: number,
+    ): Promise<CreateInvoiceResult> {
         console.log("creating", this.chainTip.identifier, remoteSignature);
         const verification = await this.signer.verify(
             Buffer.from(this.chainTip.identifier),
@@ -49,10 +52,9 @@ export class AppController {
         if (!verification.valid) return { success: false, error: "Invalid signature" };
 
         const owner = verification.pubkey;
-        const valueMsat = 50_000;
         const preimage = createPreimage(this.chainTip.localSignature, remoteSignature);
         const memo = createMemo(this.chainTip.identifier, owner);
-        return await this.invoiceRepository.addInvoice(valueMsat, memo, preimage);
+        return await this.invoiceRepository.addInvoice(sats, memo, preimage);
     }
 
     public async handleInvoice(invoice: Invoice) {

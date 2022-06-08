@@ -40,7 +40,7 @@ export function invoiceApi(app: AppController): express.Router {
             return res.status(400).json({ error: "Invalid request" });
         }
 
-        const result = await app.createInvoice(body.signature);
+        const result = await app.createInvoice(body.signature, body.sats);
 
         if (!result.success) {
             return res.status(400).json(result);

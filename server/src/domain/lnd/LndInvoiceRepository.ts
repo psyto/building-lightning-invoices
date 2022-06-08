@@ -23,13 +23,13 @@ export class LndInvoiceRepository {
      * @returns
      */
     public async addInvoice(
-        valueMsat: number,
+        value: number,
         memo: string,
         preimage: Buffer,
     ): Promise<CreateInvoiceResult> {
         try {
             const invoice = await this.client.addInvoice({
-                amt_msat: valueMsat,
+                amt: value,
                 memo,
                 preimage,
             });
