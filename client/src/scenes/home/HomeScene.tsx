@@ -26,7 +26,7 @@ export const HomeScene = () => {
                 <div className="col">
                     <InvoiceForm
                         identifier={owners[0]?.identifier}
-                        startSats={Number(owners[1]?.invoice.valueMsat || 1)}
+                        startSats={Number(owners[1]?.invoice.valueSat || 1)}
                     />
                 </div>
             </div>

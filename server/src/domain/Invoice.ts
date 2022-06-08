@@ -3,7 +3,7 @@ export class Invoice {
         public memo: string,
         public preimage: string,
         public hash: string,
-        public valueMsat: string,
+        public valueSat: string,
         public settled?: boolean,
         public settleDate?: number,
     ) {}

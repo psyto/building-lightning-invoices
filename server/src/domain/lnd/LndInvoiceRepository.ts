@@ -81,7 +81,7 @@ export class LndInvoiceRepository {
             invoice.memo,
             invoice.r_preimage?.toString("hex"),
             invoice.r_hash.toString("hex"),
-            invoice.value_msat,
+            invoice.value,
             invoice.settled,
             Number(invoice.settle_date),
         );
