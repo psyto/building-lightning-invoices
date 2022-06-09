@@ -1,1 +1,1 @@
-# Lightning App Template
+# Lightning Application Invoices

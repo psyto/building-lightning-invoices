@@ -1,7 +1,7 @@
 {
-  "name": "building-lightning-app",
+  "name": "building-lightning-invoices",
   "version": "1.0.0",
-  "description": "Building Lightning app",
+  "description": "Lighting application that uses invoices",
   "scripts": {
     "postinstall": "concurrently \"npm run install:client\" \"npm run install:server\" \"npm run install:style\"",
     "install:client": "cd client; npm install",
@@ -17,15 +17,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bmancini55/building-lightning-app.git"
+    "url": "git+https://github.com/bmancini55/building-lightning-invoices.git"
   },
   "keywords": [],
   "author": "Brian Mancini <bmancini@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/bmancini55/building-lightning-app/issues"
+    "url": "https://github.com/bmancini55/building-lightning-invoices/issues"
   },
-  "homepage": "https://github.com/bmancini55/building-lightning-app#readme",
+  "homepage": "https://github.com/bmancini55/building-lightning-invoices#readme",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.16.0",
     "@typescript-eslint/parser": "^5.16.0",
