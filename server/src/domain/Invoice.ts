@@ -6,12 +6,12 @@ export class Invoice {
         public preimage: string,
         public hash: string,
         public valueSat: string,
-        public settled?: boolean,
+        public settled: boolean = false,
         public settleDate?: number,
     ) {}
 
     public get isAppInvoice(): boolean {
-        return this.memo.startsWith("buy_");
+        return /^buy_[0-9a-f]{64}_[0-9a-f]{66}$/.test(this.memo);
     }
 
     public get forIdentifier(): string {
