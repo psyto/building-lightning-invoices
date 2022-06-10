@@ -12,13 +12,22 @@ export class LndInvoiceDataMapper implements IInvoiceDataMapper {
     }
 
     /**
-     * Adds an invoice handler. The reason we are not using the EventEmitter
-     * class is that our handlers are asynchronous and EventEmitter only
-     * works with synchronous code.
+     * Adds an invoice handler that can be notified of invoice changes
      * @param handler
      */
     public addHandler(handler: InvoiceHandler) {
         this.handlers.add(handler);
+    }
+
+    /**
+     * Notifies all handlers about an invoice
+     * @param invoice
+     */
+    public async notifyHandlers(invoice: Invoice) {
+        // emit to all async event handlers
+        for (const handler of this.handlers) {
+            await handler(invoice);
+        }
     }
 
     /**
@@ -50,38 +59,28 @@ export class LndInvoiceDataMapper implements IInvoiceDataMapper {
      * @returns
      */
     public async sync(): Promise<void> {
+        // fetch all invoices
+        const num_max_invoices = Number.MAX_SAFE_INTEGER.toString();
+        const index_offset = "0";
+        const results = await this.client.listInvoices({ index_offset, num_max_invoices });
+
+        // process all retrieved invoices
+        for (const invoice of results.invoices) {
+            await this.notifyHandlers(this.convertInvoice(invoice));
+        }
+
         // subscribe to all new invoices/settlements
         void this.client.subscribeInvoices(invoice => {
-            void this.processInvoice(invoice);
+            void this.notifyHandlers(this.convertInvoice(invoice));
         }, {});
-
-        // fetch all invoices
-        const num_max_invoices = "1000";
-        let index_offset: string = undefined;
-        let cont = true;
-        while (cont) {
-            const results = await this.client.listInvoices({ index_offset, num_max_invoices });
-
-            for (const invoice of results.invoices) {
-                await this.processInvoice(invoice);
-            }
-            index_offset = (Number(results.last_index_offset) + 1).toString();
-
-            cont = results.first_index_offset === results.last_index_offset;
-        }
     }
 
-    protected async processInvoice(invoice: Lnd.Invoice): Promise<void> {
-        // convert lnd invoice into AppInvoice
-        const appInvoice = this.convertInvoice(invoice);
-
-        // emit to all async event handlers
-        for (const handler of this.handlers) {
-            await handler(appInvoice);
-        }
-    }
-
-    protected convertInvoice(invoice: Lnd.Invoice): Invoice {
+    /**
+     * Maps an LND Invoice into a domain Invoice
+     * @param invoice
+     * @returns
+     */
+    public convertInvoice(invoice: Lnd.Invoice): Invoice {
         return new Invoice(
             invoice.memo,
             invoice.r_preimage?.toString("hex"),
