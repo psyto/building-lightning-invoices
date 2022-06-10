@@ -6,11 +6,9 @@ import { Lnd } from "./v0.12.1-beta/Types";
 export type InvoiceHandler = (invoice: Invoice) => void;
 
 export class LndInvoiceRepository {
-    public cache: Map<string, Lnd.Invoice>;
     public handlers: Set<InvoiceHandler>;
 
     constructor(readonly client: ILndRpcClient) {
-        this.cache = new Map();
         this.handlers = new Set();
     }
 
@@ -56,7 +54,7 @@ export class LndInvoiceRepository {
             void this.processInvoice(invoice);
         }, {});
 
-        // fetch
+        // fetch all invoices
         const num_max_invoices = "1000";
         let index_offset: string = undefined;
         let cont = true;
@@ -73,11 +71,17 @@ export class LndInvoiceRepository {
     }
 
     protected async processInvoice(invoice: Lnd.Invoice): Promise<void> {
-        // update the cache
-        this.cache.set(invoice.r_hash.toString("hex"), invoice);
-
         // convert lnd invoice into AppInvoice
-        const appInvoice = new Invoice(
+        const appInvoice = this.convertInvoice(invoice);
+
+        // emit to all async event handlers
+        for (const handler of this.handlers) {
+            await handler(appInvoice);
+        }
+    }
+
+    protected convertInvoice(invoice: Lnd.Invoice): Invoice {
+        return new Invoice(
             invoice.memo,
             invoice.r_preimage?.toString("hex"),
             invoice.r_hash.toString("hex"),
@@ -85,10 +89,5 @@ export class LndInvoiceRepository {
             invoice.settled,
             Number(invoice.settle_date),
         );
-
-        // emit to all async event handlers
-        for (const handler of this.handlers) {
-            await handler(appInvoice);
-        }
     }
 }
