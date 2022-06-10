@@ -7,11 +7,11 @@ import serveStatic from "serve-static";
 import { Options } from "./Options";
 import { SocketServer } from "./SocketServer";
 import { sampleApi } from "./api/SampleApi";
-import { LndInvoiceDataMapper } from "./domain/lnd/LndInvoiceDataMapper";
-import { LndRpcClient } from "./domain/lnd/v0.12.1-beta/LndRpcClient";
+import { LndInvoiceDataMapper } from "./data/lnd/LndInvoiceDataMapper";
+import { LndRpcClient } from "./data/lnd/v0.12.1-beta/LndRpcClient";
 import { invoiceApi } from "./api/InvoiceApi";
 import { AppController } from "./domain/AppController";
-import { LndMessageSigner } from "./domain/lnd/LndMessageSigner";
+import { LndMessageSigner } from "./data/lnd/LndMessageSigner";
 import { Leader } from "./domain/Leader";
 import { LeaderFactory } from "./domain/LeaderFactory";
 

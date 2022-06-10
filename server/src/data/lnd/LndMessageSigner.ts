@@ -1,5 +1,5 @@
-import { IMessageSigner } from "../IMessageSigner";
-import { VerifySignatureResult } from "../VerifySignatureResult";
+import { IMessageSigner } from "../../domain/IMessageSigner";
+import { VerifySignatureResult } from "../../domain/VerifySignatureResult";
 import { ILndClient } from "./ILndClient";
 
 export class LndMessageSigner implements IMessageSigner {

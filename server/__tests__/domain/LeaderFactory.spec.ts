@@ -1,6 +1,6 @@
 import sinon from "sinon";
 import { expect } from "chai";
-import { LndMessageSigner } from "../../src/domain/lnd/LndMessageSigner";
+import { LndMessageSigner } from "../../src/data/lnd/LndMessageSigner";
 import { LeaderFactory } from "../../src/domain/LeaderFactory";
 import { Leader } from "../../src/domain/Leader";
 import { Invoice } from "../../src/domain/Invoice";

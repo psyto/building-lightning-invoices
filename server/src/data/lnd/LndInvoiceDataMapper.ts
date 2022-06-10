@@ -1,8 +1,8 @@
-import { Invoice } from "../Invoice";
-import { CreateInvoiceResult } from "../CreateInvoiceResult";
+import { Invoice } from "../../domain/Invoice";
+import { CreateInvoiceResult } from "../../domain/CreateInvoiceResult";
 import { ILndClient } from "./ILndClient";
 import { Lnd } from "./v0.12.1-beta/Types";
-import { IInvoiceDataMapper, InvoiceHandler } from "../IInvoiceDataMapper";
+import { IInvoiceDataMapper, InvoiceHandler } from "../../domain/IInvoiceDataMapper";
 
 export class LndInvoiceDataMapper implements IInvoiceDataMapper {
     protected handlers: Set<InvoiceHandler>;

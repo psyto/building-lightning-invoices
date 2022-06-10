@@ -1,5 +1,5 @@
 import { Leader } from "./Leader";
-import { LndMessageSigner } from "./lnd/LndMessageSigner";
+import { LndMessageSigner } from "../data/lnd/LndMessageSigner";
 
 export class LeaderFactory {
     constructor(readonly signer: LndMessageSigner) {}
