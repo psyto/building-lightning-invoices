@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { xor } from "../../../src/domain/util/Xor";
+import { xor } from "../../src/util/Xor";
 
 describe("function: xor", () => {
     it("should xor equal buffers", () => {

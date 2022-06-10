@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { sha256 } from "../../../src/domain/util/Sha256";
+import { sha256 } from "../../src/util/Sha256";
 
 describe("function: sha256", () => {
     it("returns correct hash", () => {
