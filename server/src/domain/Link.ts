@@ -10,11 +10,7 @@ export class Link {
     ) {}
 
     public get isSettled(): boolean {
-        return this.invoice !== undefined;
-    }
-
-    public get nodeId(): string {
-        return this.invoice?.buyerNodeId;
+        return !!this.invoice?.settled;
     }
 
     public get next(): string {
@@ -33,7 +29,7 @@ export class Link {
                 minSats: this.minSats,
                 localSignature: this.localSignature,
                 invoice: this.invoice,
-                nodeId: this.nodeId,
+                nodeId: this.invoice.buyerNodeId,
                 next: this.next,
             };
         } else {

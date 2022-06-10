@@ -4,7 +4,6 @@ import { LndMessageSigner } from "../../src/data/lnd/LndMessageSigner";
 import { LinkFactory } from "../../src/domain/LinkFactory";
 import { Link } from "../../src/domain/Link";
 import { Invoice } from "../../src/domain/Invoice";
-import { sign } from "crypto";
 
 describe("LinkFactory", () => {
     describe(".createFromSeed()", () => {
@@ -48,25 +47,10 @@ describe("LinkFactory", () => {
             expect(result.isSettled).to.be.false;
             expect(result.invoice).to.be.undefined;
             expect(result.next).to.be.undefined;
-            expect(result.nodeId).to.be.undefined;
         });
     });
 
     describe(".createFromSettled()", () => {
-        it("should throw if prior is not settled", done => {
-            // arrange
-            const settled = new Link("", "", 1);
-            const signer = sinon.createStubInstance(LndMessageSigner);
-            const sut = new LinkFactory(signer);
-
-            // act & assert
-            sut.createFromSettled(settled)
-                .then(() => done("Failed"))
-                .catch(ex => {
-                    done();
-                });
-        });
-
         it("should create a signature from the prior invoice preimage", async () => {
             // arrange
             const settled = new Link(
@@ -139,7 +123,6 @@ describe("LinkFactory", () => {
             expect(result.isSettled).to.be.false;
             expect(result.invoice).to.be.undefined;
             expect(result.next).to.be.undefined;
-            expect(result.nodeId).to.be.undefined;
         });
     });
 });
