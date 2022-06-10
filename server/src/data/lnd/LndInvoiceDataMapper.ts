@@ -1,5 +1,4 @@
 import { Invoice } from "../../domain/Invoice";
-import { CreateInvoiceResult } from "../../domain/CreateInvoiceResult";
 import { ILndClient } from "./ILndClient";
 import { Lnd } from "./v0.12.1-beta/Types";
 import { IInvoiceDataMapper, InvoiceHandler } from "../../domain/IInvoiceDataMapper";
@@ -31,26 +30,16 @@ export class LndInvoiceDataMapper implements IInvoiceDataMapper {
     }
 
     /**
-     * Adds an invoice and returns a CreateInvoiceResult
+     * Adds an invoice and returns the payment_request
      * @returns
      */
-    public async add(value: number, memo: string, preimage: Buffer): Promise<CreateInvoiceResult> {
-        try {
-            const invoice = await this.client.addInvoice({
-                amt: value,
-                memo,
-                preimage,
-            });
-            return {
-                success: true,
-                paymentRequest: invoice.payment_request,
-            };
-        } catch (ex) {
-            return {
-                success: false,
-                error: ex.message,
-            };
-        }
+    public async add(value: number, memo: string, preimage: Buffer): Promise<string> {
+        const invoice = await this.client.addInvoice({
+            amt: value,
+            memo,
+            preimage,
+        });
+        return invoice.payment_request;
     }
 
     /**

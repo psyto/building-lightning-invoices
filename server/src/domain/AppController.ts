@@ -56,6 +56,7 @@ export class AppController {
             return { success: false, error: "Invalid signature" };
         }
 
+        // create information about the invoice
         const owner = verification.pubkey;
         const preimage = Invoice.createPreimage(
             this.chainTip.localSignature,
@@ -63,7 +64,20 @@ export class AppController {
             sats,
         );
         const memo = Invoice.createMemo(this.chainTip.identifier, owner);
-        return await this.invoiceDataMapper.add(sats, memo, preimage);
+
+        // try to create the invoice
+        try {
+            const paymentRequest = await this.invoiceDataMapper.add(sats, memo, preimage);
+            return {
+                success: true,
+                paymentRequest,
+            };
+        } catch (ex) {
+            return {
+                success: false,
+                error: ex.message,
+            };
+        }
     }
 
     public async handleInvoice(invoice: Invoice) {
