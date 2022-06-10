@@ -1,19 +1,19 @@
 import sinon from "sinon";
 import { expect } from "chai";
 import { LndMessageSigner } from "../../src/data/lnd/LndMessageSigner";
-import { LeaderFactory } from "../../src/domain/LeaderFactory";
-import { Leader } from "../../src/domain/Leader";
+import { LinkFactory } from "../../src/domain/LinkFactory";
+import { Link } from "../../src/domain/Link";
 import { Invoice } from "../../src/domain/Invoice";
 import { sign } from "crypto";
 
-describe("LeaderFactory", () => {
+describe("LinkFactory", () => {
     describe(".createFromSeed()", () => {
         it("should create a signature from the seed", async () => {
             // arrange
             const seed = "0000000000000000000000000000000000000000000000000000000000000001";
             const minSats = 1000;
             const signer = sinon.createStubInstance(LndMessageSigner);
-            const sut = new LeaderFactory(signer);
+            const sut = new LinkFactory(signer);
 
             // act
             await sut.createFromSeed(seed, minSats);
@@ -30,7 +30,7 @@ describe("LeaderFactory", () => {
             const minSats = 1000;
             const signer = sinon.createStubInstance(LndMessageSigner);
             signer.sign.resolves(localSignature);
-            const sut = new LeaderFactory(signer);
+            const sut = new LinkFactory(signer);
 
             // act
             const result = await sut.createFromSeed(seed, minSats);
@@ -55,9 +55,9 @@ describe("LeaderFactory", () => {
     describe(".createFromSettled()", () => {
         it("should throw if prior is not settled", done => {
             // arrange
-            const settled = new Leader("", "", 1);
+            const settled = new Link("", "", 1);
             const signer = sinon.createStubInstance(LndMessageSigner);
-            const sut = new LeaderFactory(signer);
+            const sut = new LinkFactory(signer);
 
             // act & assert
             sut.createFromSettled(settled)
@@ -69,7 +69,7 @@ describe("LeaderFactory", () => {
 
         it("should create a signature from the prior invoice preimage", async () => {
             // arrange
-            const settled = new Leader(
+            const settled = new Link(
                 "0000000000000000000000000000000000000000000000000000000000000001",
                 "rypj5rexme7cqdqxzok1ygqw89h3m4qsu3dkje1xt894kmwwjr181sz5tnyz6o588bmx384sdx73ojnz3ebrnifxy67ykjfsfctjfns1",
                 1000,
@@ -85,7 +85,7 @@ describe("LeaderFactory", () => {
                 ),
             );
             const signer = sinon.createStubInstance(LndMessageSigner);
-            const sut = new LeaderFactory(signer);
+            const sut = new LinkFactory(signer);
 
             // act
             await sut.createFromSettled(settled);
@@ -99,7 +99,7 @@ describe("LeaderFactory", () => {
 
         it("should return new unsettled link", async () => {
             // arrange
-            const settled = new Leader(
+            const settled = new Link(
                 "0000000000000000000000000000000000000000000000000000000000000001",
                 "rypj5rexme7cqdqxzok1ygqw89h3m4qsu3dkje1xt894kmwwjr181sz5tnyz6o588bmx384sdx73ojnz3ebrnifxy67ykjfsfctjfns1",
                 1000,
@@ -118,7 +118,7 @@ describe("LeaderFactory", () => {
             signer.sign.resolves(
                 "d6jchbf6m8349k1fdaj41pwaywnmcufd18nzzjmg3z9rwy59a4gd15bu9dmqzzayrt8gckwz6whtam66e7rn5pugysdg9u4xdkimtsgh",
             );
-            const sut = new LeaderFactory(signer);
+            const sut = new LinkFactory(signer);
 
             // act
             const result = await sut.createFromSettled(settled);

@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { Invoice } from "../../src/domain/Invoice";
-import { Leader } from "../../src/domain/Leader";
+import { Link } from "../../src/domain/Link";
 
 describe("Invoice", () => {
     describe("#createMemo()", () => {
@@ -130,7 +130,7 @@ describe("Invoice", () => {
     describe(".settled()", () => {
         it("returns true when invoice settles link", () => {
             // arrange
-            const link = new Leader(
+            const link = new Link(
                 "0000000000000000000000000000000000000000000000000000000000000001",
                 "rypj5rexme7cqdqxzok1ygqw89h3m4qsu3dkje1xt894kmwwjr181sz5tnyz6o588bmx384sdx73ojnz3ebrnifxy67ykjfsfctjfns1",
                 1000,
@@ -150,7 +150,7 @@ describe("Invoice", () => {
 
         it("returns false when invoice not settled", () => {
             // arrange
-            const link = new Leader(
+            const link = new Link(
                 "0000000000000000000000000000000000000000000000000000000000000001",
                 "rypj5rexme7cqdqxzok1ygqw89h3m4qsu3dkje1xt894kmwwjr181sz5tnyz6o588bmx384sdx73ojnz3ebrnifxy67ykjfsfctjfns1",
                 1000,
@@ -168,7 +168,7 @@ describe("Invoice", () => {
 
         it("returns false when not an app invoice", () => {
             // arrange
-            const link = new Leader(
+            const link = new Link(
                 "0000000000000000000000000000000000000000000000000000000000000001",
                 "rypj5rexme7cqdqxzok1ygqw89h3m4qsu3dkje1xt894kmwwjr181sz5tnyz6o588bmx384sdx73ojnz3ebrnifxy67ykjfsfctjfns1",
                 1000,
@@ -188,7 +188,7 @@ describe("Invoice", () => {
 
         it("returns false identifiers dont match", () => {
             // arrange
-            const link = new Leader(
+            const link = new Link(
                 "0000000000000000000000000000000000000000000000000000000000000001",
                 "rypj5rexme7cqdqxzok1ygqw89h3m4qsu3dkje1xt894kmwwjr181sz5tnyz6o588bmx384sdx73ojnz3ebrnifxy67ykjfsfctjfns1",
                 1000,

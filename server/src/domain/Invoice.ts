@@ -1,5 +1,5 @@
 import { sha256 } from "../util/Sha256";
-import { Leader } from "./Leader";
+import { Link } from "./Link";
 
 /**
  * Domain specific class for handling invoices that the application is interested in.
@@ -59,7 +59,7 @@ export class Invoice {
         return this.memo.split("_")[2];
     }
 
-    public settles(leader: Leader) {
-        return this.settled && this.isAppInvoice() && this.priorPreimage === leader.identifier;
+    public settles(link: Link) {
+        return this.settled && this.isAppInvoice() && this.priorPreimage === link.identifier;
     }
 }

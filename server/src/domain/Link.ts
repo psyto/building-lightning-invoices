@@ -1,6 +1,6 @@
 import { Invoice } from "./Invoice";
 
-export class Leader {
+export class Link {
     public invoice: Invoice;
 
     constructor(public identifier: string, public localSignature: string, public minSats: number) {}

@@ -1,18 +1,18 @@
-import { Leader } from "./Leader";
+import { Link } from "./Link";
 import { LndMessageSigner } from "../data/lnd/LndMessageSigner";
 
-export class LeaderFactory {
+export class LinkFactory {
     constructor(readonly signer: LndMessageSigner) {}
 
-    public async createFromSeed(seed: string, startSats: number): Promise<Leader> {
+    public async createFromSeed(seed: string, startSats: number): Promise<Link> {
         // sign the seed
         const firstSignature = await this.signer.sign(seed);
 
         // create the first link
-        return new Leader(seed, firstSignature, startSats);
+        return new Link(seed, firstSignature, startSats);
     }
 
-    public async createFromSettled(settled: Leader): Promise<Leader> {
+    public async createFromSettled(settled: Link): Promise<Link> {
         if (!settled.isSettled) {
             throw new Error("Not settled");
         }
@@ -23,7 +23,7 @@ export class LeaderFactory {
         // calc the min acceptable invoice
         const minSats = Number(settled.invoice.valueSat) + 1;
 
-        // create the leader record from the previous preimage, signature, and sats
-        return new Leader(settled.next, nextSignature, minSats);
+        // create the new link from the previous preimage, signature, and sats
+        return new Link(settled.next, nextSignature, minSats);
     }
 }

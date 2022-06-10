@@ -1,5 +1,5 @@
 import React from "react";
-import { Leader as LeaderRecord } from "../../../services/ApiTypes";
+import { Link as LeaderRecord } from "../../../services/ApiTypes";
 
 export const Leader = ({ leader }: { leader: LeaderRecord }) => {
     return (

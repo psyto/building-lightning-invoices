@@ -1,22 +1,22 @@
 import { CreateInvoiceResult } from "./CreateInvoiceResult";
 import { Invoice } from "./Invoice";
-import { Leader } from "./Leader";
-import { LeaderFactory } from "./LeaderFactory";
+import { Link } from "./Link";
+import { LinkFactory } from "./LinkFactory";
 import { IInvoiceDataMapper } from "./IInvoiceDataMapper";
 import { IMessageSigner } from "./IMessageSigner";
 
 export class AppController {
-    public chain: Leader[];
-    public receiver: (info: Leader[]) => void;
+    public chain: Link[];
+    public receiver: (info: Link[]) => void;
 
-    public get chainTip(): Leader {
+    public get chainTip(): Link {
         return this.chain[this.chain.length - 1];
     }
 
     constructor(
         readonly invoiceDataMapper: IInvoiceDataMapper,
         readonly signer: IMessageSigner,
-        readonly leaderFactor: LeaderFactory,
+        readonly linkFactory: LinkFactory,
     ) {
         this.chain = [];
     }
@@ -29,11 +29,33 @@ export class AppController {
      */
     public async start(seed: string, startSats: number) {
         // create the initial link in the ownership chain
-        const firstLink = await this.leaderFactor.createFromSeed(seed, startSats);
+        const firstLink = await this.linkFactory.createFromSeed(seed, startSats);
         this.chain.push(firstLink);
 
         // initiate synchronization of invoices
         await this.invoiceDataMapper.sync();
+    }
+
+    /**
+     * Processes an invoice that the application is notified about by checking if it settles the
+     * current chain tip. If it does then move the chain forward.
+     * @param invoice
+     */
+    public async handleInvoice(invoice: Invoice) {
+        if (invoice.settles(this.chainTip)) {
+            // settle the current chain tip
+            const settled = this.chainTip;
+            settled.settle(invoice);
+
+            // create the next blank link
+            const nextLink = await this.linkFactory.createFromSettled(settled);
+            this.chain.push(nextLink);
+
+            // send to
+            if (this.receiver) {
+                this.receiver([settled, nextLink]);
+            }
+        }
     }
 
     /**
@@ -77,23 +99,6 @@ export class AppController {
                 success: false,
                 error: ex.message,
             };
-        }
-    }
-
-    public async handleInvoice(invoice: Invoice) {
-        if (invoice.settles(this.chainTip)) {
-            // settle the current chain tip
-            const settled = this.chainTip;
-            settled.settle(invoice);
-
-            // create the next blank link
-            const nextLink = await this.leaderFactor.createFromSettled(settled);
-            this.chain.push(nextLink);
-
-            // send to
-            if (this.receiver) {
-                this.receiver([settled, nextLink]);
-            }
         }
     }
 }

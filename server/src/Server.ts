@@ -12,8 +12,8 @@ import { LndRpcClient } from "./data/lnd/v0.12.1-beta/LndRpcClient";
 import { invoiceApi } from "./api/InvoiceApi";
 import { AppController } from "./domain/AppController";
 import { LndMessageSigner } from "./data/lnd/LndMessageSigner";
-import { Leader } from "./domain/Leader";
-import { LeaderFactory } from "./domain/LeaderFactory";
+import { Link } from "./domain/Link";
+import { LinkFactory } from "./domain/LinkFactory";
 
 /**
  * Entry point for our application. This is responsible for setting up
@@ -50,8 +50,8 @@ async function run() {
 
     const lndInvoiceDataMapper = new LndInvoiceDataMapper(lndRpcClient);
     const lndMessageSigner = new LndMessageSigner(lndRpcClient);
-    const leaderFactory = new LeaderFactory(lndMessageSigner);
-    const appController = new AppController(lndInvoiceDataMapper, lndMessageSigner, leaderFactory);
+    const linkFactory = new LinkFactory(lndMessageSigner);
+    const appController = new AppController(lndInvoiceDataMapper, lndMessageSigner, linkFactory);
 
     // notify the application of invoice changes
     lndInvoiceDataMapper.addHandler(appController.handleInvoice.bind(appController));
@@ -78,7 +78,7 @@ async function run() {
     socketServer.listen(server);
 
     // broadcast updates to the client
-    appController.receiver = (leaders: Leader[]) => socketServer.broadcast("leaders", leaders);
+    appController.receiver = (links: Link[]) => socketServer.broadcast("links", links);
 }
 
 run().catch(ex => {

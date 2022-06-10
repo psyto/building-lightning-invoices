@@ -1,4 +1,4 @@
-import { Leader, CreateInvoiceRequest, CreateInvoiceResult } from "./ApiTypes";
+import { Link, CreateInvoiceRequest, CreateInvoiceResult } from "./ApiTypes";
 
 export class ApiService {
     constructor(readonly host: string = "http://127.0.0.1:8001") {}
@@ -21,7 +21,7 @@ export class ApiService {
         return await res.json();
     }
 
-    public async getOwners(): Promise<Leader[]> {
+    public async getOwners(): Promise<Link[]> {
         return this.get("/api/owners");
     }
 

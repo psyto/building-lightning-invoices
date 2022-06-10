@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useSocket } from "../../hooks/UseSocket";
 import { useApi } from "../../hooks/UseApi";
-import { Leader } from "../../services/ApiTypes";
+import { Link } from "../../services/ApiTypes";
 import { LeaderBoard } from "./components/LeaderBoard";
 import { InvoiceForm } from "./components/InvoiceForm";
 
 export const HomeScene = () => {
     const api = useApi();
-    const [owners, setOwners] = useState<Leader[]>([]);
+    const [owners, setOwners] = useState<Link[]>([]);
 
     useEffect(() => {
         api.getOwners().then(allOwners => setOwners(allOwners.reverse()));
     }, []);
 
-    useSocket("leaders", (leaders: Leader[]) => {
+    useSocket("links", (leaders: Link[]) => {
         const copy = owners.slice();
         for (const leader of leaders) {
             const index = copy.findIndex(p => p.identifier === leader.identifier);
