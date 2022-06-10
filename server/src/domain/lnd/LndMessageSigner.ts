@@ -1,8 +1,8 @@
-import { ILndRpcClient } from "./ILndRpcClient";
+import { ILndClient } from "./ILndClient";
 import { Lnd } from "./v0.12.1-beta/Types";
 
 export class LndMessageSigner {
-    constructor(readonly client: ILndRpcClient) {}
+    constructor(readonly client: ILndClient) {}
 
     public async sign(msg: string): Promise<string> {
         const result = await this.client.signMessage(Buffer.from(msg));

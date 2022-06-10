@@ -4,7 +4,7 @@ import * as protoLoader from "@grpc/proto-loader";
 import path from "path";
 import { Lnd } from "./Types";
 import { promisify } from "util";
-import { ILndRpcClient } from "../ILndRpcClient";
+import { ILndClient } from "../ILndClient";
 
 process.env.GRPC_SSL_CIPHER_SUITES = "HIGH+ECDSA";
 
@@ -14,7 +14,7 @@ process.env.GRPC_SSL_CIPHER_SUITES = "HIGH+ECDSA";
  * based on instructions for creating a GRPC client from
  * https://github.com/lightningnetwork/lnd/blob/master/docs/grpc/javascript.md
  */
-export class LndRpcClient implements ILndRpcClient {
+export class LndRpcClient implements ILndClient {
     protected lightning: any;
 
     constructor(host: string, macaroon: Buffer, cert: Buffer) {
@@ -151,5 +151,27 @@ export class LndRpcClient implements ILndRpcClient {
             signature,
         };
         return promisify(this.lightning.verifyMessage.bind(this.lightning))(options);
+    }
+
+    /**
+     * Obtains the latest graph state from point of view of the node.
+     * Returns nodes and channel edges.
+     * @returns
+     */
+    public getGraph(): Promise<Lnd.Graph> {
+        throw new Error("Not implemented");
+    }
+
+    /**
+     * Initiates a streaming RPC that provides updates to changes in the
+     * graph state from the point of view of the node. Includes events
+     * for new nodes coming online, nodes updating their information, new
+     * channels being advertised, updates to routing policy for each
+     * direction of the channel, and when channels are closed.
+     * @param cb
+     * @returns
+     */
+    public subscribeGraph(cb: (update: Lnd.GraphUpdate) => void): Promise<void> {
+        throw new Error("Not implemented");
     }
 }

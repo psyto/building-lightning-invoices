@@ -1,13 +1,13 @@
 import { Invoice } from "../Invoice";
 import { CreateInvoiceResult } from "../CreateInvoiceResult";
-import { ILndRpcClient } from "./ILndRpcClient";
+import { ILndClient } from "./ILndClient";
 import { Lnd } from "./v0.12.1-beta/Types";
 import { IInvoiceDataMapper, InvoiceHandler } from "../IInvoiceDataMapper";
 
 export class LndInvoiceDataMapper implements IInvoiceDataMapper {
     protected handlers: Set<InvoiceHandler>;
 
-    constructor(readonly client: ILndRpcClient) {
+    constructor(readonly client: ILndClient) {
         this.handlers = new Set();
     }
 
