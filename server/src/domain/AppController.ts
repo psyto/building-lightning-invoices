@@ -1,5 +1,4 @@
 import { CreateInvoiceResult } from "./CreateInvoiceResult";
-import { createPreimage } from "./util/CreatePreimage";
 import { Invoice } from "./Invoice";
 import { Leader } from "./Leader";
 import { LeaderFactory } from "./LeaderFactory";
@@ -59,8 +58,12 @@ export class AppController {
         }
 
         const owner = verification.pubkey;
-        const preimage = createPreimage(this.chainTip.localSignature, remoteSignature, sats);
-        const memo = createMemo(this.chainTip.identifier, owner);
+        const preimage = Invoice.createPreimage(
+            this.chainTip.localSignature,
+            remoteSignature,
+            sats,
+        );
+        const memo = Invoice.createMemo(this.chainTip.identifier, owner);
         return await this.invoiceDataMapper.add(sats, memo, preimage);
     }
 
@@ -80,8 +83,4 @@ export class AppController {
             }
         }
     }
-}
-
-function createMemo(hash: string, nodeId: string) {
-    return `buy_${hash}_${nodeId}`;
 }

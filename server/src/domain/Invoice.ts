@@ -1,6 +1,16 @@
+import { sha256 } from "../util/Sha256";
 import { Leader } from "./Leader";
 
 export class Invoice {
+    public static createMemo(preimage: string, buyer: string) {
+        return `buy_${preimage}_${buyer}`;
+    }
+
+    public static createPreimage(local: string, remote: string, sats: number) {
+        const input = Buffer.from(local + remote + sats.toString());
+        return sha256(input);
+    }
+
     constructor(
         public memo: string,
         public preimage: string,
