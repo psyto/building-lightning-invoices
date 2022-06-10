@@ -62,7 +62,10 @@ export class LndInvoiceDataMapper implements IInvoiceDataMapper {
         // fetch all invoices
         const num_max_invoices = Number.MAX_SAFE_INTEGER.toString();
         const index_offset = "0";
-        const results = await this.client.listInvoices({ index_offset, num_max_invoices });
+        const results: Lnd.ListInvoiceResponse = await this.client.listInvoices({
+            index_offset,
+            num_max_invoices,
+        });
 
         // process all retrieved invoices
         for (const invoice of results.invoices) {

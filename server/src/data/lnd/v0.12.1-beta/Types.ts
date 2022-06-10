@@ -166,8 +166,8 @@ export namespace Lnd {
         features: FeaturesEntry[];
         is_keysend: boolean;
         payment_addr: Buffer;
-        is_amp: boolean;
-        amp_invoice_state: AmpInvoiceStateEntry[];
+        is_amp?: boolean;
+        amp_invoice_state?: AmpInvoiceStateEntry[];
     }
 
     export interface RouteHint {
