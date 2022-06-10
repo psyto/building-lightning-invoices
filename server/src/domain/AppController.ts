@@ -1,10 +1,10 @@
 import { CreateInvoiceResult } from "./CreateInvoiceResult";
-import { LndInvoiceRepository } from "./lnd/LndInvoiceRepository";
 import { LndMessageSigner } from "./lnd/LndMessageSigner";
 import { createPreimage } from "./util/CreatePreimage";
 import { Invoice } from "./Invoice";
 import { Leader } from "./Leader";
 import { LeaderFactory } from "./LeaderFactory";
+import { IInvoiceDataMapper } from "./IInvoiceDataMapper";
 
 export class AppController {
     public chain: Leader[];
@@ -15,11 +15,11 @@ export class AppController {
     }
 
     constructor(
-        readonly invoiceRepository: LndInvoiceRepository,
+        readonly invoiceDataMapper: IInvoiceDataMapper,
         readonly signer: LndMessageSigner,
         readonly linkFactory: LeaderFactory,
     ) {
-        this.invoiceRepository.addHandler(this.handleInvoice.bind(this));
+        this.invoiceDataMapper.addHandler(this.handleInvoice.bind(this));
         this.chain = [];
     }
 
@@ -35,7 +35,7 @@ export class AppController {
         this.chain.push(firstLink);
 
         // initiate synchronization of invoices
-        await this.invoiceRepository.sync();
+        await this.invoiceDataMapper.sync();
     }
 
     /**
@@ -60,7 +60,7 @@ export class AppController {
         const owner = verification.pubkey;
         const preimage = createPreimage(this.chainTip.localSignature, remoteSignature, sats);
         const memo = createMemo(this.chainTip.identifier, owner);
-        return await this.invoiceRepository.addInvoice(sats, memo, preimage);
+        return await this.invoiceDataMapper.add(sats, memo, preimage);
     }
 
     public async handleInvoice(invoice: Invoice) {

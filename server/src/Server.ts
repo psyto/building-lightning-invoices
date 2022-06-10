@@ -7,12 +7,13 @@ import serveStatic from "serve-static";
 import { Options } from "./Options";
 import { SocketServer } from "./SocketServer";
 import { sampleApi } from "./api/SampleApi";
-import { LndInvoiceRepository } from "./domain/lnd/LndInvoiceRepository";
+import { LndInvoiceDataMapper } from "./domain/lnd/LndInvoiceDataMapper";
 import { LndRpcClient } from "./domain/lnd/v0.12.1-beta/LndRpcClient";
 import { invoiceApi } from "./api/InvoiceApi";
 import { AppController } from "./domain/AppController";
 import { LndMessageSigner } from "./domain/lnd/LndMessageSigner";
 import { Leader } from "./domain/Leader";
+import { LeaderFactory } from "./domain/LeaderFactory";
 
 /**
  * Entry point for our application. This is responsible for setting up
@@ -47,10 +48,10 @@ async function run() {
         options.lndCert,
     );
 
-    // create a invoice repo
-    const lndInvoiceRepo = new LndInvoiceRepository(lndRpcClient);
+    const lndInvoiceDataMapper = new LndInvoiceDataMapper(lndRpcClient);
     const lndMessageSigner = new LndMessageSigner(lndRpcClient);
-    const appController = new AppController(lndInvoiceRepo, lndMessageSigner);
+    const leaderFactory = new LeaderFactory(lndMessageSigner);
+    const appController = new AppController(lndInvoiceDataMapper, lndMessageSigner, leaderFactory);
 
     // start the application logic
     await appController.start(

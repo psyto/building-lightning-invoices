@@ -2,29 +2,28 @@ import { Invoice } from "../Invoice";
 import { CreateInvoiceResult } from "../CreateInvoiceResult";
 import { ILndRpcClient } from "./ILndRpcClient";
 import { Lnd } from "./v0.12.1-beta/Types";
+import { IInvoiceDataMapper, InvoiceHandler } from "../IInvoiceDataMapper";
 
-export type InvoiceHandler = (invoice: Invoice) => void;
-
-export class LndInvoiceRepository {
-    public handlers: Set<InvoiceHandler>;
+export class LndInvoiceDataMapper implements IInvoiceDataMapper {
+    protected handlers: Set<InvoiceHandler>;
 
     constructor(readonly client: ILndRpcClient) {
         this.handlers = new Set();
     }
 
+    /**
+     * Adds an invoice handler
+     * @param handler
+     */
     public addHandler(handler: InvoiceHandler) {
         this.handlers.add(handler);
     }
 
     /**
-     *
+     * Adds an invoice and returns a CreateInvoiceResult
      * @returns
      */
-    public async addInvoice(
-        value: number,
-        memo: string,
-        preimage: Buffer,
-    ): Promise<CreateInvoiceResult> {
+    public async add(value: number, memo: string, preimage: Buffer): Promise<CreateInvoiceResult> {
         try {
             const invoice = await this.client.addInvoice({
                 amt: value,
