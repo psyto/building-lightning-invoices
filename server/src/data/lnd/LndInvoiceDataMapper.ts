@@ -12,7 +12,9 @@ export class LndInvoiceDataMapper implements IInvoiceDataMapper {
     }
 
     /**
-     * Adds an invoice handler
+     * Adds an invoice handler. The reason we are not using the EventEmitter
+     * class is that our handlers are asynchronous and EventEmitter only
+     * works with synchronous code.
      * @param handler
      */
     public addHandler(handler: InvoiceHandler) {

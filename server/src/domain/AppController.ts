@@ -18,7 +18,6 @@ export class AppController {
         readonly signer: IMessageSigner,
         readonly leaderFactor: LeaderFactory,
     ) {
-        this.invoiceDataMapper.addHandler(this.handleInvoice.bind(this));
         this.chain = [];
     }
 

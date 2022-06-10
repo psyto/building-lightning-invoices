@@ -53,6 +53,9 @@ async function run() {
     const leaderFactory = new LeaderFactory(lndMessageSigner);
     const appController = new AppController(lndInvoiceDataMapper, lndMessageSigner, leaderFactory);
 
+    // notify the application of invoice changes
+    this.invoiceDataMapper.addHandler(appController.handleInvoice.bind(appController));
+
     // start the application logic
     await appController.start(
         "0000000000000000000000000000000000000000000000000000000000000001",
