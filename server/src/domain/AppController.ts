@@ -1,10 +1,10 @@
 import { CreateInvoiceResult } from "./CreateInvoiceResult";
-import { LndMessageSigner } from "./lnd/LndMessageSigner";
 import { createPreimage } from "./util/CreatePreimage";
 import { Invoice } from "./Invoice";
 import { Leader } from "./Leader";
 import { LeaderFactory } from "./LeaderFactory";
 import { IInvoiceDataMapper } from "./IInvoiceDataMapper";
+import { IMessageSigner } from "./IMessageSigner";
 
 export class AppController {
     public chain: Leader[];
@@ -16,8 +16,8 @@ export class AppController {
 
     constructor(
         readonly invoiceDataMapper: IInvoiceDataMapper,
-        readonly signer: LndMessageSigner,
-        readonly linkFactory: LeaderFactory,
+        readonly signer: IMessageSigner,
+        readonly leaderFactor: LeaderFactory,
     ) {
         this.invoiceDataMapper.addHandler(this.handleInvoice.bind(this));
         this.chain = [];
@@ -31,7 +31,7 @@ export class AppController {
      */
     public async start(seed: string, startSats: number) {
         // create the initial link in the ownership chain
-        const firstLink = await this.linkFactory.createFromSeed(seed, startSats);
+        const firstLink = await this.leaderFactor.createFromSeed(seed, startSats);
         this.chain.push(firstLink);
 
         // initiate synchronization of invoices
@@ -53,6 +53,7 @@ export class AppController {
             remoteSignature,
         );
 
+        // return failure if signature fails
         if (!verification.valid) {
             return { success: false, error: "Invalid signature" };
         }
@@ -70,7 +71,7 @@ export class AppController {
             settled.settle(invoice);
 
             // create the next blank link
-            const nextLink = await this.linkFactory.createFromSettled(settled);
+            const nextLink = await this.leaderFactor.createFromSettled(settled);
             this.chain.push(nextLink);
 
             // send to
