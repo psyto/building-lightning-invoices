@@ -20,19 +20,19 @@ export class Invoice {
         public settleDate?: number,
     ) {}
 
-    public get isAppInvoice(): boolean {
+    public isAppInvoice(): boolean {
         return /^buy_[0-9a-f]{64}_[0-9a-f]{66}$/.test(this.memo);
     }
 
-    public get forIdentifier(): string {
+    public get buyingPreimage(): string {
         return this.memo.split("_")[1];
     }
 
-    public get forNodeId(): string {
+    public get buyingNodeId(): string {
         return this.memo.split("_")[2];
     }
 
     public settles(leader: Leader) {
-        return this.settled && this.isAppInvoice && this.forIdentifier === leader.identifier;
+        return this.settled && this.isAppInvoice() && this.buyingPreimage === leader.identifier;
     }
 }

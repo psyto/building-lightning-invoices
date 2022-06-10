@@ -36,7 +36,7 @@ describe("Invoice", () => {
         });
     });
 
-    describe(".isAppInvoice", () => {
+    describe(".isAppInvoice()", () => {
         it("returns true when starts with buy_", () => {
             // arrange
             const sut = new Invoice(
@@ -46,7 +46,7 @@ describe("Invoice", () => {
                 "1000",
             );
 
-            expect(sut.isAppInvoice).to.equal(true, "should match `buy_{32 hex}_{33 hex}");
+            expect(sut.isAppInvoice()).to.equal(true, "should match `buy_{32 hex}_{33 hex}");
         });
 
         it("should return false when doesn't start with buy_", () => {
@@ -59,7 +59,7 @@ describe("Invoice", () => {
             );
 
             // act & assert
-            expect(sut.isAppInvoice).to.equal(
+            expect(sut.isAppInvoice()).to.equal(
                 false,
                 "should be false if it doesn't start with buy",
             );
@@ -75,7 +75,7 @@ describe("Invoice", () => {
             );
 
             // act & assert
-            expect(sut.isAppInvoice).to.equal(false);
+            expect(sut.isAppInvoice()).to.equal(false);
         });
 
         it("should return false when doesn't have 33 hex bytes for nodeid", () => {
@@ -88,7 +88,7 @@ describe("Invoice", () => {
             );
 
             // act & assert
-            expect(sut.isAppInvoice).to.equal(false);
+            expect(sut.isAppInvoice()).to.equal(false);
         });
     });
 
@@ -103,7 +103,7 @@ describe("Invoice", () => {
             );
 
             // act & assert
-            expect(sut.forIdentifier).to.equal(
+            expect(sut.buyingPreimage).to.equal(
                 "0000000000000000000000000000000000000000000000000000000000000001",
             );
         });
@@ -120,7 +120,7 @@ describe("Invoice", () => {
             );
 
             // act & assert
-            expect(sut.forNodeId).to.equal(
+            expect(sut.buyingNodeId).to.equal(
                 "03e9c399722533594be3172968900b78edee2bffecee32c995d19d47c323d05131",
             );
         });
