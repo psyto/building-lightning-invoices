@@ -4,13 +4,14 @@ import { Leader } from "../../src/domain/Leader";
 
 describe("Invoice", () => {
     describe("#createMemo()", () => {
-        it("creates the memo in the form buy_{preimage}_{buyer}", () => {
+        it("should create the memo in the form buy_{priorPreimage}_{buyer}", () => {
             // arrange
-            const preimage = "0000000000000000000000000000000000000000000000000000000000000001";
+            const priorPreimage =
+                "0000000000000000000000000000000000000000000000000000000000000001";
             const buyer = "03e9c399722533594be3172968900b78edee2bffecee32c995d19d47c323d05131";
 
             // act + assert
-            expect(Invoice.createMemo(preimage, buyer)).to.equal(
+            expect(Invoice.createMemo(priorPreimage, buyer)).to.equal(
                 "buy_0000000000000000000000000000000000000000000000000000000000000001_03e9c399722533594be3172968900b78edee2bffecee32c995d19d47c323d05131",
                 "memo must be in form buy_{preimage}_{buyer}",
             );
@@ -18,7 +19,7 @@ describe("Invoice", () => {
     });
 
     describe("#createPreimage()", () => {
-        it("returns sha256(local || remote || sats)", () => {
+        it("should return sha256(local || remote || sats)", () => {
             // arrange
             const local =
                 "rypj5rexme7cqdqxzok1ygqw89h3m4qsu3dkje1xt894kmwwjr181sz5tnyz6o588bmx384sdx73ojnz3ebrnifxy67ykjfsfctjfns1";
@@ -37,7 +38,7 @@ describe("Invoice", () => {
     });
 
     describe(".isAppInvoice()", () => {
-        it("returns true when starts with buy_", () => {
+        it("should return true when matches pattern buy_{priorPreimage}_{nodeid}", () => {
             // arrange
             const sut = new Invoice(
                 "buy_0000000000000000000000000000000000000000000000000000000000000001_03e9c399722533594be3172968900b78edee2bffecee32c995d19d47c323d05131",
@@ -65,7 +66,7 @@ describe("Invoice", () => {
             );
         });
 
-        it("should return false when doesn't have 32 hex bytes for identity", () => {
+        it("should return false when doesn't have 32 hex bytes for priorPreimage", () => {
             // arrange
             const sut = new Invoice(
                 "buy_00_03e9c399722533594be3172968900b78edee2bffecee32c995d19d47c323d05131",
@@ -92,8 +93,8 @@ describe("Invoice", () => {
         });
     });
 
-    describe(".forIdentifier", () => {
-        it("returns the identity from the memo", () => {
+    describe(".priorPreimage", () => {
+        it("returns the prior preimage from the memo", () => {
             // arrange
             const sut = new Invoice(
                 "buy_0000000000000000000000000000000000000000000000000000000000000001_03e9c399722533594be3172968900b78edee2bffecee32c995d19d47c323d05131",
@@ -103,13 +104,13 @@ describe("Invoice", () => {
             );
 
             // act & assert
-            expect(sut.buyingPreimage).to.equal(
+            expect(sut.priorPreimage).to.equal(
                 "0000000000000000000000000000000000000000000000000000000000000001",
             );
         });
     });
 
-    describe(".forNodeId", () => {
+    describe(".buyerNodeId", () => {
         it("returns the node identity from the memo", () => {
             // arrange
             const sut = new Invoice(
@@ -120,7 +121,7 @@ describe("Invoice", () => {
             );
 
             // act & assert
-            expect(sut.buyingNodeId).to.equal(
+            expect(sut.buyerNodeId).to.equal(
                 "03e9c399722533594be3172968900b78edee2bffecee32c995d19d47c323d05131",
             );
         });

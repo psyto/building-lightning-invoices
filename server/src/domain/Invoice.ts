@@ -1,11 +1,28 @@
 import { sha256 } from "../util/Sha256";
 import { Leader } from "./Leader";
 
+/**
+ * Domain specific class for handling invoices that the application is interested in.
+ */
 export class Invoice {
-    public static createMemo(preimage: string, buyer: string) {
-        return `buy_${preimage}_${buyer}`;
+    /**
+     * Creates a memo in the form `buy_{priorPreimage}_{buyer}` where preimage and buyer are both
+     * hex encoded.
+     * @param priorPreimage 32-byte preimage, hex encoded
+     * @param buyer 33-byte public key of the buyer, hex encoded
+     * @returns
+     */
+    public static createMemo(priorPreimage: string, buyer: string) {
+        return `buy_${priorPreimage}_${buyer}`;
     }
 
+    /**
+     *
+     * @param local
+     * @param remote
+     * @param sats
+     * @returns
+     */
     public static createPreimage(local: string, remote: string, sats: number) {
         const input = Buffer.from(local + remote + sats.toString());
         return sha256(input);
@@ -20,19 +37,29 @@ export class Invoice {
         public settleDate?: number,
     ) {}
 
+    /**
+     * Returns true when the invoice's memo matches the buy_{priorPreimage}_{buyer} pattern
+     * @returns
+     */
     public isAppInvoice(): boolean {
         return /^buy_[0-9a-f]{64}_[0-9a-f]{66}$/.test(this.memo);
     }
 
-    public get buyingPreimage(): string {
+    /**
+     * Extracts the prior preimage value from the memo
+     */
+    public get priorPreimage(): string {
         return this.memo.split("_")[1];
     }
 
-    public get buyingNodeId(): string {
+    /**
+     * Extracts the buyer nodeId from the memo
+     */
+    public get buyerNodeId(): string {
         return this.memo.split("_")[2];
     }
 
     public settles(leader: Leader) {
-        return this.settled && this.isAppInvoice() && this.buyingPreimage === leader.identifier;
+        return this.settled && this.isAppInvoice() && this.priorPreimage === leader.identifier;
     }
 }

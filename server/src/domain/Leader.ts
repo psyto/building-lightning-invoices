@@ -10,7 +10,7 @@ export class Leader {
     }
 
     public get nodeId(): string {
-        return this.invoice?.buyingNodeId;
+        return this.invoice?.buyerNodeId;
     }
 
     public get next(): string {
