@@ -7,16 +7,16 @@ import { InvoiceForm } from "./components/InvoiceForm";
 
 export const HomeScene = () => {
     const api = useApi();
-    const [owners, setOwners] = useState<Link[]>([]);
+    const [links, setLinks] = useState<Link[]>([]);
 
     useEffect(() => {
-        api.getOwners().then(allOwners => setOwners(allOwners.reverse()));
+        api.getOwners().then(allOwners => setLinks(allOwners.reverse()));
     }, []);
 
     useSocket("links", (leaders: Link[]) => {
-        const copy = owners.slice();
+        const copy = links.slice();
         for (const leader of leaders) {
-            const index = copy.findIndex(p => p.identifier === leader.identifier);
+            const index = copy.findIndex(p => p.priorPreimage === leader.priorPreimage);
             if (index >= 0) {
                 copy[index] = leader;
                 continue;
@@ -24,23 +24,23 @@ export const HomeScene = () => {
                 copy.unshift(leader);
             }
         }
-        setOwners(copy);
+        setLinks(copy);
     });
 
-    console.log(owners);
+    console.log(links);
     return (
         <div className="container">
             <div className="row">
                 <div className="col">
                     <InvoiceForm
-                        identifier={owners[0]?.identifier}
-                        startSats={Number(owners[0]?.minSats || 0)}
+                        priorPreimage={links[0]?.priorPreimage}
+                        startSats={Number(links[0]?.minSats || 0)}
                     />
                 </div>
             </div>
             <div className="row">
                 <div className="col">
-                    <LeaderBoard leaders={owners} />
+                    <LeaderBoard leaders={links} />
                 </div>
             </div>
         </div>

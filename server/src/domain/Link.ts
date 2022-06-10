@@ -3,7 +3,11 @@ import { Invoice } from "./Invoice";
 export class Link {
     public invoice: Invoice;
 
-    constructor(public identifier: string, public localSignature: string, public minSats: number) {}
+    constructor(
+        public priorPreimage: string,
+        public localSignature: string,
+        public minSats: number,
+    ) {}
 
     public get isSettled(): boolean {
         return this.invoice !== undefined;
@@ -24,7 +28,7 @@ export class Link {
     public toJSON() {
         if (this.isSettled) {
             return {
-                identifier: this.identifier,
+                priorPreimage: this.priorPreimage,
                 isSettled: this.isSettled,
                 minSats: this.minSats,
                 localSignature: this.localSignature,
@@ -34,7 +38,7 @@ export class Link {
             };
         } else {
             return {
-                identifier: this.identifier,
+                priorPreimage: this.priorPreimage,
                 isSettled: this.isSettled,
                 minSats: this.minSats,
             };

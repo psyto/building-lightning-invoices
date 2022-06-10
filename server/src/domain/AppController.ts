@@ -69,7 +69,7 @@ export class AppController {
     ): Promise<CreateInvoiceResult> {
         // verify the invoice provided by the user
         const verification = await this.signer.verify(
-            Buffer.from(this.chainTip.identifier),
+            Buffer.from(this.chainTip.priorPreimage),
             remoteSignature,
         );
 
@@ -85,7 +85,7 @@ export class AppController {
             remoteSignature,
             sats,
         );
-        const memo = Invoice.createMemo(this.chainTip.identifier, owner);
+        const memo = Invoice.createMemo(this.chainTip.priorPreimage, owner);
 
         // try to create the invoice
         try {

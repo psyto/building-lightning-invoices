@@ -15,8 +15,8 @@ export const LeaderBoard = ({ leaders }: { leaders: LeaderRecord[] }) => {
             <tbody>
                 {leaders
                     .filter(p => p.isSettled)
-                    .map(owner => (
-                        <Leader key={owner.identifier} leader={owner} />
+                    .map(link => (
+                        <Leader key={link.priorPreimage} leader={link} />
                     ))}
             </tbody>
         </table>

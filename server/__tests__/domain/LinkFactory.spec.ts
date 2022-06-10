@@ -36,7 +36,7 @@ describe("LinkFactory", () => {
             const result = await sut.createFromSeed(seed, minSats);
 
             // assert
-            expect(result.identifier).to.equal(seed, "Expect identifier to equal seed");
+            expect(result.priorPreimage).to.equal(seed, "Expect identifier to equal seed");
             expect(result.localSignature).to.equal(
                 localSignature,
                 "expect localSignature to be result from `signer.sign`",
@@ -124,7 +124,7 @@ describe("LinkFactory", () => {
             const result = await sut.createFromSettled(settled);
 
             // assert
-            expect(result.identifier).to.equal(
+            expect(result.priorPreimage).to.equal(
                 "821c43d357903adbf257bb883e0441d8c095c0cbc595c6fcccca49f94378c860",
                 "Expect identifier to be prior preimage",
             );

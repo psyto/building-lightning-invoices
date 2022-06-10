@@ -3,13 +3,13 @@ import { useApi } from "../../../hooks/UseApi";
 import { CreateInvoiceResult } from "../../../services/ApiTypes";
 
 export const InvoiceForm = ({
-    identifier,
+    priorPreimage,
     startSats,
 }: {
-    identifier: string;
+    priorPreimage: string;
     startSats: number;
 }) => {
-    console.log("identifier", identifier);
+    console.log("priorPreimage", priorPreimage);
     console.log("startSats", startSats);
 
     const [sig, setSig] = useState<string>();
@@ -34,7 +34,7 @@ export const InvoiceForm = ({
         setSig("");
         setSats(startSats);
         setInvoice(undefined);
-    }, [identifier]);
+    }, [priorPreimage]);
 
     return (
         <form className="form">
@@ -49,7 +49,7 @@ export const InvoiceForm = ({
             </div>
             <div className="form-group">
                 <p>Step 2. Sign a message for the following:</p>
-                <h3>{identifier}</h3>
+                <h3>{priorPreimage}</h3>
             </div>
             <div className="form-group">
                 <p>Step 3. Paste your signature to receive an invoice:</p>

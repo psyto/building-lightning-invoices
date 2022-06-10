@@ -60,6 +60,6 @@ export class Invoice {
     }
 
     public settles(link: Link) {
-        return this.settled && this.isAppInvoice() && this.priorPreimage === link.identifier;
+        return this.settled && this.isAppInvoice() && this.priorPreimage === link.priorPreimage;
     }
 }
