@@ -10,8 +10,8 @@ export class LndMessageSigner implements IMessageSigner {
         return result.signature;
     }
 
-    public async verify(msg: Buffer, signature: string): Promise<VerifySignatureResult> {
-        const result = await this.client.verifyMessage(msg, signature);
+    public async verify(msg: string, signature: string): Promise<VerifySignatureResult> {
+        const result = await this.client.verifyMessage(Buffer.from(msg), signature);
         return result;
     }
 }

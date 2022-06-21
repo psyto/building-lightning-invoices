@@ -68,10 +68,7 @@ export class AppController {
         sats: number,
     ): Promise<CreateInvoiceResult> {
         // verify the invoice provided by the user
-        const verification = await this.signer.verify(
-            Buffer.from(this.chainTip.priorPreimage),
-            remoteSignature,
-        );
+        const verification = await this.signer.verify(this.chainTip.priorPreimage, remoteSignature);
 
         // return failure if signature fails
         if (!verification.valid) {
