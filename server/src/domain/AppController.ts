@@ -33,7 +33,7 @@ export class AppController {
         this.chain.push(firstLink);
 
         // initiate synchronization of invoices
-        await this.invoiceDataMapper.sync();
+        await this.invoiceDataMapper.sync(this.handleInvoice.bind(this));
     }
 
     /**
