@@ -75,7 +75,7 @@ async function run() {
     socketServer.listen(server);
 
     // broadcast updates to the client
-    appController.receiver = (links: Link[]) => socketServer.broadcast("links", links);
+    appController.listener = (links: Link[]) => socketServer.broadcast("links", links);
 }
 
 run().catch(ex => {

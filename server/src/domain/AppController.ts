@@ -7,7 +7,7 @@ import { IMessageSigner } from "./IMessageSigner";
 
 export class AppController {
     public chain: Link[];
-    public receiver: (info: Link[]) => void;
+    public listener: (info: Link[]) => void;
 
     public get chainTip(): Link {
         return this.chain[this.chain.length - 1];
@@ -52,8 +52,8 @@ export class AppController {
             this.chain.push(nextLink);
 
             // send to
-            if (this.receiver) {
-                this.receiver([settled, nextLink]);
+            if (this.listener) {
+                this.listener([settled, nextLink]);
             }
         }
     }

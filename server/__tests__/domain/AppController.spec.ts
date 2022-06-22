@@ -97,7 +97,7 @@ describe("AppController", () => {
 
             // assign receiver
             receiver = sinon.stub();
-            sut.receiver = receiver;
+            sut.listener = receiver;
         });
 
         it("ignores non-app invoice", async () => {
