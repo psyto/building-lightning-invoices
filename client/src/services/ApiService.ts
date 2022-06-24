@@ -22,7 +22,7 @@ export class ApiService {
     }
 
     public async getOwners(): Promise<Link[]> {
-        return this.get("/api/owners");
+        return this.get("/api/links");
     }
 
     public async createInvoice(signature: string, sats: number): Promise<CreateInvoiceResult> {

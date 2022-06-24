@@ -6,14 +6,14 @@ import serveStatic from "serve-static";
 
 import { Options } from "./Options";
 import { SocketServer } from "./SocketServer";
-import { sampleApi } from "./api/SampleApi";
 import { LndInvoiceDataMapper } from "./data/lnd/LndInvoiceDataMapper";
 import { LndRpcClient } from "./data/lnd/v0.12.1-beta/LndRpcClient";
-import { invoiceApi } from "./api/InvoiceApi";
 import { AppController } from "./domain/AppController";
 import { LndMessageSigner } from "./data/lnd/LndMessageSigner";
 import { Link } from "./domain/Link";
 import { LinkFactory } from "./domain/LinkFactory";
+import { invoiceApi } from "./api/InvoiceApi";
+import { linkApi } from "./api/LinkApi";
 
 /**
  * Entry point for our application. This is responsible for setting up
@@ -60,6 +60,7 @@ async function run() {
     );
 
     // mount our API routers
+    app.use(linkApi(appController));
     app.use(invoiceApi(appController));
 
     // start the server on the port
