@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSocket } from "../../hooks/UseSocket";
 import { useApi } from "../../hooks/UseApi";
 import { Link } from "../../services/ApiTypes";
-import { LeaderBoard } from "./components/LeaderBoard";
+import { LinkList } from "./components/LinkList";
 import { InvoiceForm } from "./components/InvoiceForm";
 
 export const HomeScene = () => {
@@ -27,10 +27,15 @@ export const HomeScene = () => {
         setLinks(copy);
     });
 
-    console.log(links);
     return (
         <div className="container">
             <div className="row">
+                <div className="col">
+                    <h1>Ruler of Satoshi</h1>
+                </div>
+            </div>
+            <div className="row">
+                <div className="col"></div>
                 <div className="col">
                     <InvoiceForm
                         priorPreimage={links[0]?.priorPreimage}
@@ -40,7 +45,7 @@ export const HomeScene = () => {
             </div>
             <div className="row">
                 <div className="col">
-                    <LeaderBoard leaders={links} />
+                    <LinkList links={links} />
                 </div>
             </div>
         </div>

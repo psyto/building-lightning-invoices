@@ -1,8 +1,8 @@
 import React from "react";
-import { Link as LeaderRecord } from "../../../services/ApiTypes";
-import { Leader } from "./Leader";
+import { Link as LinkRecord } from "../../../services/ApiTypes";
+import { Link } from "./Link";
 
-export const LeaderBoard = ({ leaders }: { leaders: LeaderRecord[] }) => {
+export const LinkList = ({ links }: { links: LinkRecord[] }) => {
     return (
         <table className="table">
             <thead>
@@ -13,10 +13,10 @@ export const LeaderBoard = ({ leaders }: { leaders: LeaderRecord[] }) => {
                 </tr>
             </thead>
             <tbody>
-                {leaders
+                {links
                     .filter(p => p.isSettled)
                     .map(link => (
-                        <Leader key={link.priorPreimage} leader={link} />
+                        <Link key={link.priorPreimage} link={link} />
                     ))}
             </tbody>
         </table>
