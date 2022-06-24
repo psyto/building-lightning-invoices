@@ -60,7 +60,6 @@ async function run() {
     );
 
     // mount our API routers
-    app.use(sampleApi());
     app.use(invoiceApi(appController));
 
     // start the server on the port
