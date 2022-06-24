@@ -25,11 +25,10 @@ export class Link {
         if (this.isSettled) {
             return {
                 priorPreimage: this.priorPreimage,
-                isSettled: this.isSettled,
-                minSats: this.minSats,
                 localSignature: this.localSignature,
-                invoice: this.invoice,
-                nodeId: this.invoice.buyerNodeId,
+                minSats: this.minSats,
+                invoice: this.invoice.toJSON(),
+                isSettled: this.isSettled,
                 next: this.next,
             };
         } else {

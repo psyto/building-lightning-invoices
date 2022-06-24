@@ -4,7 +4,10 @@ import { Link as LinkRecord } from "../../../services/ApiTypes";
 export const Link = ({ link }: { link: LinkRecord }) => {
     return (
         <tr>
-            <td>{link.priorPreimage}</td>
+            <td style={{ wordBreak: "break-all" }}>{link.invoice.buyerNodeId}</td>
+            <td style={{ wordBreak: "break-all" }}>{link.invoice.priorPreimage}</td>
+            <td style={{ wordBreak: "break-all" }}>{link.localSignature}</td>
+            <td style={{ wordBreak: "break-all" }}>{link.next}</td>
             <td>{link.invoice.valueSat}</td>
             <td>
                 {new Date(link.invoice.settleDate * 1000).toLocaleDateString()}{" "}

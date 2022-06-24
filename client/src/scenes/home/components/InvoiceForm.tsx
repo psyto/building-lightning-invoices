@@ -38,8 +38,14 @@ export const InvoiceForm = ({
 
     return (
         <form className="form">
+            <h4>
+                <strong>Become the ruler by following these steps:</strong>
+            </h4>
             <div className="form-group">
-                <p>Step 1. Specify the satoshis you will pay to become the new leader:</p>
+                <p>
+                    <strong>Step 1.</strong> Specify the satoshis you will pay to become the new
+                    ruler, it must be more than the last amount:
+                </p>
                 <input
                     type="number"
                     className="form-control"
@@ -47,17 +53,24 @@ export const InvoiceForm = ({
                     onChange={satsChanges}
                 ></input>
             </div>
-            <div className="form-group">
-                <p>Step 2. Sign a message for the following:</p>
-                <h3>{priorPreimage}</h3>
+            <div className="form-group mt-3">
+                <p>
+                    <strong>Step 2.</strong> Sign a message using your Lightning Network node with
+                    the following message:
+                </p>
+                <h4 style={{ wordBreak: "break-all" }}>{priorPreimage}</h4>
             </div>
-            <div className="form-group">
-                <p>Step 3. Paste your signature to receive an invoice:</p>
+            <div className="form-group mt-3">
+                <p>
+                    <strong>Step 3.</strong> Paste your signature to receive an invoice:
+                </p>
                 <textarea className="form-control" value={sig} onChange={sigChanged}></textarea>
             </div>
             {invoice && (
-                <div className="form-group">
-                    <p>Step 4. Pay the invoice</p>
+                <div className="form-group mt-3">
+                    <p>
+                        <strong>Step 4.</strong> Pay the invoice
+                    </p>
                     {invoice.success ? (
                         <textarea
                             className="form-control"

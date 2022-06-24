@@ -4,21 +4,27 @@ import { Link } from "./Link";
 
 export const LinkList = ({ links }: { links: LinkRecord[] }) => {
     return (
-        <table className="table">
-            <thead>
-                <tr>
-                    <td>Node Id</td>
-                    <td>Sats</td>
-                    <td>Date</td>
-                </tr>
-            </thead>
-            <tbody>
-                {links
-                    .filter(p => p.isSettled)
-                    .map(link => (
-                        <Link key={link.priorPreimage} link={link} />
-                    ))}
-            </tbody>
-        </table>
+        <div style={{ borderTop: "1px solid #c0c0c0" }}>
+            <h4 className="mt-3 mb-3">Ruler History</h4>
+            <table className="table">
+                <thead>
+                    <tr>
+                        <td>Node Id</td>
+                        <td>Prior Preimage</td>
+                        <td>Server Secret</td>
+                        <td>Preimage</td>
+                        <td>Sats</td>
+                        <td>Date</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {links
+                        .filter(p => p.isSettled)
+                        .map(link => (
+                            <Link key={link.priorPreimage} link={link} />
+                        ))}
+                </tbody>
+            </table>
+        </div>
     );
 };

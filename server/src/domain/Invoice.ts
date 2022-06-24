@@ -62,4 +62,17 @@ export class Invoice {
     public settles(link: Link) {
         return this.settled && this.isAppInvoice() && this.priorPreimage === link.priorPreimage;
     }
+
+    public toJSON() {
+        return {
+            memo: this.memo,
+            preimage: this.preimage,
+            hash: this.hash,
+            valueSat: this.valueSat,
+            settled: this.settled,
+            settleDate: this.settleDate,
+            priorPreimage: this.priorPreimage,
+            buyerNodeId: this.buyerNodeId,
+        };
+    }
 }

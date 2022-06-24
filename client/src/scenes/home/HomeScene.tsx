@@ -4,6 +4,7 @@ import { useApi } from "../../hooks/UseApi";
 import { Link } from "../../services/ApiTypes";
 import { LinkList } from "./components/LinkList";
 import { InvoiceForm } from "./components/InvoiceForm";
+import { Leader } from "./components/Leader";
 
 export const HomeScene = () => {
     const api = useApi();
@@ -29,21 +30,23 @@ export const HomeScene = () => {
 
     return (
         <div className="container">
-            <div className="row">
-                <div className="col">
+            <div className="row mb-5">
+                <div className="col text-center">
                     <h1>Ruler of Satoshi</h1>
                 </div>
             </div>
             <div className="row">
-                <div className="col"></div>
-                <div className="col">
+                <div className="col text-center" style={{ borderRight: "1px solid #c0c0c0" }}>
+                    <Leader link={links[links.length - 2]} />
+                </div>
+                <div className="col ml-5">
                     <InvoiceForm
                         priorPreimage={links[0]?.priorPreimage}
                         startSats={Number(links[0]?.minSats || 0)}
                     />
                 </div>
             </div>
-            <div className="row">
+            <div className="row mt-5">
                 <div className="col">
                     <LinkList links={links} />
                 </div>
