@@ -39,12 +39,12 @@ export const InvoiceForm = ({
     return (
         <form className="form">
             <h4>
-                <strong>Become the ruler by following these steps:</strong>
+                <strong>Become the leader by following these steps:</strong>
             </h4>
             <div className="form-group">
                 <p>
                     <strong>Step 1.</strong> Specify the satoshis you will pay to become the new
-                    ruler, it must be more than the last amount:
+                    leader, it must be more than the last amount:
                 </p>
                 <input
                     type="number"

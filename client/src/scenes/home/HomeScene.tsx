@@ -28,6 +28,8 @@ export const HomeScene = () => {
         setLinks(copy);
     });
 
+    console.log(links);
+
     return (
         <div className="container">
             <div className="row mb-5">
@@ -36,8 +38,8 @@ export const HomeScene = () => {
                 </div>
             </div>
             <div className="row">
-                <div className="col text-center" style={{ borderRight: "1px solid #c0c0c0" }}>
-                    <Leader link={links[links.length - 2]} />
+                <div className="col" style={{ borderRight: "1px solid #c0c0c0" }}>
+                    <Leader link={links[1]} />
                 </div>
                 <div className="col ml-5">
                     <InvoiceForm
