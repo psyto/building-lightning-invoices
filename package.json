@@ -14,7 +14,8 @@
     "watch:client": "cd client; npm run watch",
     "watch:server": "cd server; npm run watch",
     "watch:style": "cd style; npm run watch",
-    "test:server": "cd server; node_modules/.bin/mocha --require ts-node/register --recursive \"__tests__/**/*.spec.ts\""
+    "test:server": "cd server; node_modules/.bin/mocha --require ts-node/register --recursive \"__tests__/**/*.spec.ts\"",
+    "script:create-invoice": "cd server; ts-node scripts/CreateInvoiceScript.ts"
   },
   "repository": {
     "type": "git",
