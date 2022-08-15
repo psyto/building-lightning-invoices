@@ -17,7 +17,7 @@ export const HomeScene = () => {
     useSocket("links", (leaders: Link[]) => {
         const copy = links.slice();
         for (const leader of leaders) {
-            const index = copy.findIndex(p => p.priorPreimage === leader.priorPreimage);
+            const index = copy.findIndex(p => p.linkId === leader.linkId);
             if (index >= 0) {
                 copy[index] = leader;
                 continue;
@@ -43,7 +43,7 @@ export const HomeScene = () => {
                 </div>
                 <div className="col ml-5">
                     <InvoiceForm
-                        priorPreimage={links[0]?.priorPreimage}
+                        linkId={links[0]?.linkId}
                         startSats={Number(links[0]?.minSats || 0)}
                     />
                 </div>

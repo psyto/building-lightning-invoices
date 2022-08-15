@@ -60,7 +60,7 @@ export class Invoice {
     }
 
     public settles(link: Link) {
-        return this.settled && this.isAppInvoice() && this.priorPreimage === link.priorPreimage;
+        return this.settled && this.isAppInvoice() && this.priorPreimage === link.linkId;
     }
 
     public toJSON() {

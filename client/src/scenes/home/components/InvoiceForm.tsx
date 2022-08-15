@@ -3,13 +3,13 @@ import { useApi } from "../../../hooks/UseApi";
 import { CreateInvoiceResult } from "../../../services/ApiTypes";
 
 export const InvoiceForm = ({
-    priorPreimage,
+    linkId,
     startSats,
 }: {
-    priorPreimage: string;
+    linkId: string;
     startSats: number;
 }) => {
-    console.log("priorPreimage", priorPreimage);
+    console.log("linkId", linkId);
     console.log("startSats", startSats);
 
     const [sig, setSig] = useState<string>();
@@ -34,7 +34,7 @@ export const InvoiceForm = ({
         setSig("");
         setSats(startSats);
         setInvoice(undefined);
-    }, [priorPreimage]);
+    }, [linkId]);
 
     return (
         <form className="form">
@@ -58,7 +58,7 @@ export const InvoiceForm = ({
                     <strong>Step 2.</strong> Sign a message using your Lightning Network node with
                     the following message:
                 </p>
-                <h4 style={{ wordBreak: "break-all" }}>{priorPreimage}</h4>
+                <h4 style={{ wordBreak: "break-all" }}>{linkId}</h4>
             </div>
             <div className="form-group mt-3">
                 <p>

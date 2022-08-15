@@ -22,7 +22,7 @@ export const LinkList = ({ links }: { links: LinkRecord[] }) => {
                     {links
                         .filter(p => p.isSettled)
                         .map(link => (
-                            <Link key={link.priorPreimage} link={link} />
+                            <Link key={link.linkId} link={link} />
                         ))}
                 </tbody>
             </table>

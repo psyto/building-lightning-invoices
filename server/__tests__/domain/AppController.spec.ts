@@ -180,7 +180,7 @@ describe("AppController", () => {
                 await sut.handleInvoice(invoice);
 
                 // assert
-                expect(sut.chainTip.priorPreimage).to.equal(
+                expect(sut.chainTip.linkId).to.equal(
                     "821c43d357903adbf257bb883e0441d8c095c0cbc595c6fcccca49f94378c860",
                     "Expect identifier to be prior preimage, try using linkFactory.createFromSettled",
                 );
@@ -213,10 +213,10 @@ describe("AppController", () => {
 
                 // assert
                 expect(receiver.called).to.equal(true, "should call the receiver");
-                expect(receiver.args[0][0][0].priorPreimage).to.equal(
+                expect(receiver.args[0][0][0].linkId).to.equal(
                     "0000000000000000000000000000000000000000000000000000000000000001",
                 );
-                expect(receiver.args[0][0][1].priorPreimage).to.equal(
+                expect(receiver.args[0][0][1].linkId).to.equal(
                     "821c43d357903adbf257bb883e0441d8c095c0cbc595c6fcccca49f94378c860",
                 );
             });
@@ -244,7 +244,7 @@ describe("AppController", () => {
             sut.chain.push(firstLink);
         });
 
-        it("verifies signature using priorPreimage and signature", async () => {
+        it("verifies signature using linkId and signature", async () => {
             // arrange
             const signature =
                 "rna7paf9c4ha5cjxwu849px7riqpdn6hd5gts8q9r4kb9sje64w4assrbithnjjipfuq3quceyp8b6rm9ifc9ddqan4ntej7yoj74snd";
@@ -260,7 +260,7 @@ describe("AppController", () => {
             // assert
             expect(messageSigner.verify.args[0][0]).to.deep.equal(
                 "0000000000000000000000000000000000000000000000000000000000000001",
-                "verify should be called with the priorPrimage of the chaintip",
+                "verify should be called with the linkId of the chaintip",
             );
             expect(messageSigner.verify.args[0][1]).to.deep.equal(
                 signature,
