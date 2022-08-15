@@ -6,11 +6,11 @@ export class Link {
     constructor(public linkId: string, public localSignature: string, public minSats: number) {}
 
     public get isSettled(): boolean {
-        return !!this.invoice?.settled;
+        throw new Error("Exercise");
     }
 
     public get nextLinkId(): string {
-        return this.invoice?.preimage;
+        throw new Error("Exercise");
     }
 
     public settle(invoice: Invoice) {
