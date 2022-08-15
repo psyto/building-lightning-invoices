@@ -9,7 +9,7 @@ export class Link {
         return !!this.invoice?.settled;
     }
 
-    public get next(): string {
+    public get nextLinkId(): string {
         return this.invoice?.preimage;
     }
 
@@ -25,7 +25,7 @@ export class Link {
                 minSats: this.minSats,
                 invoice: this.invoice.toJSON(),
                 isSettled: this.isSettled,
-                next: this.next,
+                next: this.nextLinkId,
             };
         } else {
             return {

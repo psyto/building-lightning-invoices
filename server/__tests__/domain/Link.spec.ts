@@ -59,7 +59,7 @@ describe("Link", () => {
         });
     });
 
-    describe(".next", () => {
+    describe(".nextLinkId", () => {
         it("should return undefined when unsettled", () => {
             // arrange
             const sut = new Link(
@@ -69,7 +69,7 @@ describe("Link", () => {
             );
 
             // act & assert
-            expect(sut.next).to.equal(undefined);
+            expect(sut.nextLinkId).to.equal(undefined);
         });
 
         it("should return invoice's preimage when settled", () => {
@@ -91,7 +91,7 @@ describe("Link", () => {
             );
 
             // act && assert
-            expect(sut.next).to.equal(
+            expect(sut.nextLinkId).to.equal(
                 "821c43d357903adbf257bb883e0441d8c095c0cbc595c6fcccca49f94378c860",
             );
         });

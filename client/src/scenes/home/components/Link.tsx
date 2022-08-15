@@ -7,7 +7,7 @@ export const Link = ({ link }: { link: LinkRecord }) => {
             <td style={{ wordBreak: "break-all" }}>{link.invoice.buyerNodeId}</td>
             <td style={{ wordBreak: "break-all" }}>{link.invoice.priorPreimage}</td>
             <td style={{ wordBreak: "break-all" }}>{link.localSignature}</td>
-            <td style={{ wordBreak: "break-all" }}>{link.next}</td>
+            <td style={{ wordBreak: "break-all" }}>{link.nextLinkId}</td>
             <td>{link.invoice.valueSat}</td>
             <td>
                 {new Date(link.invoice.settleDate * 1000).toLocaleDateString()}{" "}

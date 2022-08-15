@@ -194,7 +194,7 @@ describe("AppController", () => {
                 );
                 expect(sut.chainTip.isSettled).to.be.false;
                 expect(sut.chainTip.invoice).to.be.undefined;
-                expect(sut.chainTip.next).to.be.undefined;
+                expect(sut.chainTip.nextLinkId).to.be.undefined;
             });
 
             it("should emit the settled link and the new chaintip", async () => {

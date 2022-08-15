@@ -30,12 +30,12 @@ export class LinkFactory {
      */
     public async createFromSettled(settled: Link): Promise<Link> {
         // create our signature from the settled preimage
-        const nextSignature = await this.signer.sign(settled.next);
+        const nextSignature = await this.signer.sign(settled.nextLinkId);
 
         // calc the min acceptable invoice
         const minSats = Number(settled.invoice.valueSat) + 1;
 
         // create the new link from the previous preimage, signature, and sats
-        return new Link(settled.next, nextSignature, minSats);
+        return new Link(settled.nextLinkId, nextSignature, minSats);
     }
 }

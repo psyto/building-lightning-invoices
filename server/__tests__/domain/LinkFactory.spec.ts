@@ -46,7 +46,7 @@ describe("LinkFactory", () => {
             );
             expect(result.isSettled).to.be.false;
             expect(result.invoice).to.be.undefined;
-            expect(result.next).to.be.undefined;
+            expect(result.nextLinkId).to.be.undefined;
         });
     });
 
@@ -122,7 +122,7 @@ describe("LinkFactory", () => {
             );
             expect(result.isSettled).to.be.false;
             expect(result.invoice).to.be.undefined;
-            expect(result.next).to.be.undefined;
+            expect(result.nextLinkId).to.be.undefined;
         });
     });
 });
