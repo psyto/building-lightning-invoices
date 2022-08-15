@@ -41,21 +41,21 @@ export class Invoice {
      * @returns
      */
     public isAppInvoice(): boolean {
-        return /^buy_[0-9a-f]{64}_[0-9a-f]{66}$/.test(this.memo);
+        throw new Error("Exercise");
     }
 
     /**
      * Extracts the prior preimage value from the memo
      */
     public get priorPreimage(): string {
-        return this.memo.split("_")[1];
+        throw new Error("Exercise");
     }
 
     /**
      * Extracts the buyer nodeId from the memo
      */
     public get buyerNodeId(): string {
-        return this.memo.split("_")[2];
+        throw new Error("Exercise");
     }
 
     public settles(link: Link) {
