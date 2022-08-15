@@ -5,7 +5,7 @@ export const Link = ({ link }: { link: LinkRecord }) => {
     return (
         <tr>
             <td style={{ wordBreak: "break-all" }}>{link.invoice.buyerNodeId}</td>
-            <td style={{ wordBreak: "break-all" }}>{link.invoice.priorPreimage}</td>
+            <td style={{ wordBreak: "break-all" }}>{link.invoice.linkId}</td>
             <td style={{ wordBreak: "break-all" }}>{link.localSignature}</td>
             <td style={{ wordBreak: "break-all" }}>{link.nextLinkId}</td>
             <td>{link.invoice.valueSat}</td>

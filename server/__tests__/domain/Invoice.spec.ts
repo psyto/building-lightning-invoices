@@ -4,16 +4,15 @@ import { Link } from "../../src/domain/Link";
 
 describe("Invoice", () => {
     describe("#createMemo()", () => {
-        it("should create the memo in the form buy_{priorPreimage}_{buyer}", () => {
+        it("should create the memo in the form buy_{linkId}_{buyer}", () => {
             // arrange
-            const priorPreimage =
-                "0000000000000000000000000000000000000000000000000000000000000001";
+            const linkId = "0000000000000000000000000000000000000000000000000000000000000001";
             const buyer = "03e9c399722533594be3172968900b78edee2bffecee32c995d19d47c323d05131";
 
             // act + assert
-            expect(Invoice.createMemo(priorPreimage, buyer)).to.equal(
+            expect(Invoice.createMemo(linkId, buyer)).to.equal(
                 "buy_0000000000000000000000000000000000000000000000000000000000000001_03e9c399722533594be3172968900b78edee2bffecee32c995d19d47c323d05131",
-                "memo must be in form buy_{preimage}_{buyer}",
+                "memo must be in form buy_{linkId}_{buyer}",
             );
         });
     });
@@ -38,7 +37,7 @@ describe("Invoice", () => {
     });
 
     describe(".isAppInvoice()", () => {
-        it("should return true when matches pattern buy_{priorPreimage}_{nodeid}", () => {
+        it("should return true when matches pattern buy_{linkId}_{nodeid}", () => {
             // arrange
             const sut = new Invoice(
                 "buy_0000000000000000000000000000000000000000000000000000000000000001_03e9c399722533594be3172968900b78edee2bffecee32c995d19d47c323d05131",
@@ -66,7 +65,7 @@ describe("Invoice", () => {
             );
         });
 
-        it("should return false when doesn't have 32 hex bytes for priorPreimage", () => {
+        it("should return false when doesn't have 32 hex bytes for linkdId", () => {
             // arrange
             const sut = new Invoice(
                 "buy_00_03e9c399722533594be3172968900b78edee2bffecee32c995d19d47c323d05131",
@@ -93,7 +92,7 @@ describe("Invoice", () => {
         });
     });
 
-    describe(".priorPreimage", () => {
+    describe(".linkId", () => {
         it("returns the prior preimage from the memo", () => {
             // arrange
             const sut = new Invoice(
@@ -104,7 +103,7 @@ describe("Invoice", () => {
             );
 
             // act & assert
-            expect(sut.priorPreimage).to.equal(
+            expect(sut.linkId).to.equal(
                 "0000000000000000000000000000000000000000000000000000000000000001",
             );
         });

@@ -25,7 +25,7 @@ export class Link {
                 minSats: this.minSats,
                 invoice: this.invoice.toJSON(),
                 isSettled: this.isSettled,
-                next: this.nextLinkId,
+                nextLinkId: this.nextLinkId,
             };
         } else {
             return {

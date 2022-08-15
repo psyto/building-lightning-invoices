@@ -6,14 +6,14 @@ import { Link } from "./Link";
  */
 export class Invoice {
     /**
-     * Creates a memo in the form `buy_{priorPreimage}_{buyer}` where preimage and buyer are both
+     * Creates a memo in the form `buy_{linkId}_{buyer}` where preimage and buyer are both
      * hex encoded.
-     * @param priorPreimage 32-byte preimage, hex encoded
+     * @param linkId 32-byte preimage, hex encoded
      * @param buyer 33-byte public key of the buyer, hex encoded
      * @returns
      */
-    public static createMemo(priorPreimage: string, buyer: string) {
-        return `buy_${priorPreimage}_${buyer}`;
+    public static createMemo(linkId: string, buyer: string) {
+        return `buy_${linkId}_${buyer}`;
     }
 
     /**
@@ -38,7 +38,7 @@ export class Invoice {
     ) {}
 
     /**
-     * Returns true when the invoice's memo matches the buy_{priorPreimage}_{buyer} pattern
+     * Returns true when the invoice's memo matches the buy_{linkId}_{buyer} pattern
      * @returns
      */
     public isAppInvoice(): boolean {
@@ -48,7 +48,7 @@ export class Invoice {
     /**
      * Extracts the prior preimage value from the memo
      */
-    public get priorPreimage(): string {
+    public get linkId(): string {
         return this.memo.split("_")[1];
     }
 
@@ -60,7 +60,7 @@ export class Invoice {
     }
 
     public settles(link: Link) {
-        return this.settled && this.isAppInvoice() && this.priorPreimage === link.linkId;
+        return this.settled && this.isAppInvoice() && this.linkId === link.linkId;
     }
 
     public toJSON() {
@@ -71,7 +71,7 @@ export class Invoice {
             valueSat: this.valueSat,
             settled: this.settled,
             settleDate: this.settleDate,
-            priorPreimage: this.priorPreimage,
+            linkId: this.linkId,
             buyerNodeId: this.buyerNodeId,
         };
     }
