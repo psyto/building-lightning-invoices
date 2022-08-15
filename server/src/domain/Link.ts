@@ -10,11 +10,11 @@ export class Link {
     ) {}
 
     public get isSettled(): boolean {
-        return !!this.invoice?.settled;
+        throw new Error("Exercise");
     }
 
     public get next(): string {
-        return this.invoice?.preimage;
+        throw new Error("Exercise");
     }
 
     public settle(invoice: Invoice) {

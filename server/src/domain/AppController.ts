@@ -28,12 +28,7 @@ export class AppController {
      * @param startSats
      */
     public async start(seed: string, startSats: number) {
-        // create the initial link in the ownership chain
-        const firstLink = await this.linkFactory.createFromSeed(seed, startSats);
-        this.chain.push(firstLink);
-
-        // initiate synchronization of invoices
-        await this.invoiceDataMapper.sync(this.handleInvoice.bind(this));
+        throw new Error("Exercise");
     }
 
     /**
@@ -43,13 +38,9 @@ export class AppController {
      */
     public async handleInvoice(invoice: Invoice) {
         if (invoice.settles(this.chainTip)) {
-            // settle the current chain tip
-            const settled = this.chainTip;
-            settled.settle(invoice);
-
-            // create the next blank link
-            const nextLink = await this.linkFactory.createFromSettled(settled);
-            this.chain.push(nextLink);
+            throw new Error("Exercise");
+            let settled;
+            let nextLink;
 
             // send to
             if (this.listener) {
@@ -76,13 +67,10 @@ export class AppController {
         }
 
         // create information about the invoice
-        const owner = verification.pubkey;
-        const preimage = Invoice.createPreimage(
-            this.chainTip.localSignature,
-            remoteSignature,
-            sats,
-        );
-        const memo = Invoice.createMemo(this.chainTip.priorPreimage, owner);
+        // create the memo
+        let preimage;
+        let memo;
+        throw new Error("Exercise");
 
         // try to create the invoice
         try {
