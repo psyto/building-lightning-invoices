@@ -23,7 +23,7 @@ export class Invoice {
      * @param sats
      * @returns
      */
-    public static createPreimage(local: string, remote: string, sats: number) {
+    public static createPreimage(local: string, remote: string, sats: number): Buffer {
         throw new Error("Exercise");
     }
 
