@@ -13,7 +13,7 @@ export class Invoice {
      * @returns
      */
     public static createMemo(linkId: string, buyer: string) {
-        throw new Error("Exercise");
+        throw new Error("Exercise! Replace me to pass tests!");
     }
 
     /**
@@ -24,7 +24,7 @@ export class Invoice {
      * @returns
      */
     public static createPreimage(local: string, remote: string, sats: number): Buffer {
-        throw new Error("Exercise");
+        throw new Error("Exercise! Replace me to pass tests!");
     }
 
     constructor(

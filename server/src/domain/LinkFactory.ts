@@ -11,7 +11,7 @@ export class LinkFactory {
      * @returns
      */
     public async createFromSeed(seed: string, startSats: number): Promise<Link> {
-        throw new Error("Exercise");
+        throw new Error("Exercise! Replace me to pass tests!");
     }
 
     /**
@@ -25,6 +25,6 @@ export class LinkFactory {
      * @returns
      */
     public async createFromSettled(settled: Link): Promise<Link> {
-        throw new Error("Exercise");
+        throw new Error("Exercise! Replace me to pass tests!");
     }
 }

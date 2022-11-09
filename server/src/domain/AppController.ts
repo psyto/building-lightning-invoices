@@ -28,7 +28,7 @@ export class AppController {
      * @param startSats
      */
     public async start(seed: string, startSats: number) {
-        throw new Error("Exercise");
+        throw new Error("Exercise! Replace me to pass tests!");
     }
 
     /**
@@ -38,7 +38,7 @@ export class AppController {
      */
     public async handleInvoice(invoice: Invoice) {
         if (invoice.settles(this.chainTip)) {
-            throw new Error("Exercise");
+            throw new Error("Exercise! Replace me to pass tests!");
             let settled;
             let nextLink;
 
@@ -67,9 +67,9 @@ export class AppController {
         }
 
         // create information about the invoice
+        throw new Error("Exercise! Replace me to pass tests!");
         let preimage;
         let memo;
-        throw new Error("Exercise");
 
         // try to create the invoice
         try {
