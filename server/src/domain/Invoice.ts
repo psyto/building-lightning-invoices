@@ -18,12 +18,16 @@ export class Invoice {
 
     /**
      *
-     * @param local
-     * @param remote
+     * @param localSignature
+     * @param remoteSignature
      * @param sats
      * @returns
      */
-    public static createPreimage(local: string, remote: string, sats: number): Buffer {
+    public static createPreimage(
+        localSignature: string,
+        remoteSignature: string,
+        sats: number,
+    ): Buffer {
         throw new Error("Exercise! Replace me to pass tests!");
     }
 

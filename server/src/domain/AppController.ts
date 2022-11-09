@@ -66,10 +66,17 @@ export class AppController {
             return { success: false, error: "Invalid signature" };
         }
 
-        // create information about the invoice
+        // Use `Invoice.createPreimage` to create the preimage. Hint the
+        // the `localSignature` is available on the `chaintip` and the
+        // `remoteSignature` and `sats` are arguments to this method.
         throw new Error("Exercise! Replace me to pass tests!");
-        let preimage;
-        let memo;
+        let preimage: Buffer;
+
+        // Use `Invoice.createMemo` to create the memo. Hint the `linkId`
+        // is available on the `chaintip` and the buyer is the `pubkey`
+        // obtained in the signature verification.
+        throw new Error("Exercise! Replace me to pass tests!");
+        let memo: string;
 
         // try to create the invoice
         try {
